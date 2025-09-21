@@ -2,7 +2,7 @@
 Special element implementations
 """
 
-from typing import Optional
+from typing import Any, Optional
 
 from PIL import ImageDraw
 
@@ -15,7 +15,7 @@ class BreakElement(BaseElement):
     """Line break element (br)"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> Optional[LayoutNode]:
         """Layout line break"""
         layout_engine.current_y += layout_engine.DEFAULT_FONT_SIZE * 0.5
@@ -32,7 +32,7 @@ class HorizontalRuleElement(BaseElement):
     """Horizontal rule element (hr)"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> LayoutNode:
         """Layout horizontal rule"""
         layout_node = LayoutNode(self.dom_node)

@@ -2,6 +2,8 @@
 Table cell element implementation
 """
 
+from typing import Any
+
 from PIL import ImageDraw
 
 from ...config import config
@@ -14,7 +16,7 @@ class TableCellElement(BaseElement):
     """Table cell element (td, th)"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> LayoutNode:
         """Delegate to layout_with_width method"""
         # This shouldn't be called directly for table cells

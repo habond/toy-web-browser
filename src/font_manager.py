@@ -120,8 +120,11 @@ class FontManager:
             try:
                 # Fall back to the older textsize method for older PIL versions
                 # pylint: disable=no-member
-                size = font.getsize(text)  # type: ignore[union-attr]
-                return size
+                if hasattr(font, "getsize"):
+                    size = font.getsize(text)
+                    return (int(size[0]), int(size[1]))
+                else:
+                    raise AttributeError("getsize method not available")
             except AttributeError:
                 # Ultimate fallback for very old or unusual font objects
                 return (len(text) * 8, 16)  # Rough estimate

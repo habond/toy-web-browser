@@ -47,6 +47,17 @@ htmlcov/
 .dmypy.json
 dmypy.json
 
+# Linting and formatting
+.ruff_cache/
+
+# Jupyter notebooks (if any are added)
+.ipynb_checkpoints/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
 # Output images (optional - you may want to commit some examples)
 output_images/
 

@@ -2,7 +2,7 @@
 Table row element implementation
 """
 
-from typing import Optional
+from typing import Any, Optional
 
 from PIL import ImageDraw
 
@@ -16,7 +16,7 @@ class TableRowElement(BaseElement):
     """Table row element"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> LayoutNode:
         """Delegate to layout_with_table_params method"""
         # This shouldn't be called directly for table rows

@@ -2,7 +2,7 @@
 Main table element implementation
 """
 
-from typing import Optional
+from typing import Any, Optional
 
 from PIL import ImageDraw
 
@@ -17,7 +17,7 @@ class TableElement(BaseElement):
     """Table element"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> LayoutNode:
         """Layout table element"""
         layout_node = self._create_layout_node(

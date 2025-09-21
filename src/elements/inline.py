@@ -2,7 +2,7 @@
 Inline element implementations
 """
 
-from typing import Optional
+from typing import Any, Optional
 
 from PIL import ImageDraw
 
@@ -15,7 +15,7 @@ class InlineElement(BaseElement):
     """Inline element (b, i, u, strong, em, code, span, a)"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> Optional[LayoutNode]:
         """Layout inline element"""
         layout_node = LayoutNode(self.dom_node)

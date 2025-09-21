@@ -2,7 +2,7 @@
 List element implementations
 """
 
-from typing import Optional
+from typing import Any, Optional
 
 from PIL import ImageDraw
 
@@ -16,7 +16,7 @@ class ListElement(BaseElement):
     """List element (ul, ol)"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> LayoutNode:
         """Layout list element"""
         layout_node = self._create_layout_node(
@@ -87,7 +87,7 @@ class ListItemElement(BaseElement):
         viewport_width: int,
         index: Optional[int] = None,
         ordered: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ) -> LayoutNode:
         """Layout list item"""
         layout_node = self._create_layout_node(
