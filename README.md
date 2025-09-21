@@ -8,7 +8,7 @@ A simplified web browser that renders basic HTML to PNG images. This educational
 - Computes layout positions for elements with proper text wrapping
 - Renders HTML to PNG images with professional grid-based table borders
 - Supports dynamic image sizing based on content
-- Clean modular architecture with separate parser, layout, and renderer components
+- Clean element-based architecture with modular HTML element classes
 
 ## Supported HTML Tags
 
@@ -60,15 +60,20 @@ toy-web-browser/
 ├── src/                    # Source code
 │   ├── __init__.py
 │   ├── browser.py         # Main browser logic and CLI
-│   ├── parser/            # HTML parsing module
-│   │   ├── __init__.py
-│   │   └── html_parser.py # DOM tree creation
-│   ├── layout/            # Layout computation module
-│   │   ├── __init__.py
-│   │   └── layout_engine.py # Position and size calculation
-│   └── renderer/          # Image rendering module
+│   ├── html_parser.py     # DOM tree creation
+│   ├── layout_engine.py   # Position and size calculation
+│   ├── renderer.py        # PNG image generation
+│   └── elements/          # Element-specific implementations
 │       ├── __init__.py
-│       └── renderer.py    # PNG image generation
+│       ├── base.py        # Abstract base element class
+│       ├── element_factory.py # Factory for creating elements
+│       ├── text.py        # Text rendering
+│       ├── block.py       # Block elements (div, p, blockquote)
+│       ├── heading.py     # Heading elements (h1-h6)
+│       ├── list.py        # List elements (ul, ol, li)
+│       ├── table.py       # Table elements (table, tr, td, th)
+│       ├── inline.py      # Inline elements (b, i, span, a, etc.)
+│       └── special.py     # Special elements (br, hr)
 ├── tests/                 # Test suite
 │   ├── __init__.py
 │   ├── test_browser.py    # End-to-end tests
@@ -101,24 +106,30 @@ toy-web-browser/
 
 ## Architecture
 
-The browser follows a clean 3-stage rendering pipeline with modular components:
+The browser follows a clean 3-stage rendering pipeline with element-based modularity:
 
-1. **HTML Parser** (`src/parser/`): Converts HTML text into a DOM tree
+1. **HTML Parser** (`src/html_parser.py`): Converts HTML text into a DOM tree
    - Creates `DOMNode` objects with tag, attributes, text, and children
    - Handles self-closing tags and basic HTML structure
    - Supports all major HTML elements including tables
 
-2. **Layout Engine** (`src/layout/`): DOM tree → layout tree with positions
+2. **Layout Engine** (`src/layout_engine.py`): DOM tree → layout tree with positions
+   - Delegates layout computation to element-specific classes
    - Computes absolute x,y coordinates and dimensions for each element
    - Handles text wrapping, line spacing, and table layout
    - Uses a simple box model with configurable viewport width
-   - Specialized table layout with equal-width columns
 
-3. **Renderer** (`src/renderer/`): Layout tree → PNG image
+3. **Renderer** (`src/renderer.py`): Layout tree → PNG image
+   - Delegates rendering to element-specific classes
    - Uses PIL to draw text and basic shapes
    - Loads fonts from `fonts/` directory (OpenSans, SourceCodePro)
-   - Handles text formatting (bold, italic, underline, code)
-   - Draws complete table grids with connected borders
+   - Handles text formatting and table grids
+
+4. **Element Classes** (`src/elements/`): Modular HTML element implementations
+   - **BaseElement**: Abstract base class defining layout() and render() interfaces
+   - **ElementFactory**: Creates appropriate element instances based on HTML tags
+   - **Specialized Elements**: Text, block, heading, list, table, inline, and special elements
+   - Each element class handles its own layout computation and rendering logic
 
 ## Example Files
 

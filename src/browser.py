@@ -7,8 +7,8 @@ import argparse
 import sys
 from pathlib import Path
 
-from .layout import LayoutEngine
-from .parser import HTMLParser
+from .html_parser import HTMLParser
+from .layout_engine import LayoutEngine
 from .renderer import Renderer
 
 
