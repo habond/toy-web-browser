@@ -8,7 +8,7 @@ from typing import Dict, Optional, Tuple, Union
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageFont import FreeTypeFont
 
-from .layout_engine import LayoutNode, Box
+from ..layout.layout_engine import Box, LayoutNode
 
 
 class Renderer:
@@ -88,7 +88,7 @@ class Renderer:
         # Try to create font with requested size
         if base_font and isinstance(base_font, FreeTypeFont):
             try:
-                font = ImageFont.truetype(base_font.path, int(size))
+                font = ImageFont.truetype(str(base_font.path), int(size))
             except Exception:
                 font = base_font
         elif base_font:
@@ -224,9 +224,7 @@ class Renderer:
 
     def _render_horizontal_rule(self, draw: ImageDraw.ImageDraw, box: Box) -> None:
         """Render horizontal rule"""
-        draw.line(
-            [(box.x, box.y), (box.x + box.width, box.y)], fill="gray", width=2
-        )
+        draw.line([(box.x, box.y), (box.x + box.width, box.y)], fill="gray", width=2)
 
     def _render_heading(
         self, draw: ImageDraw.ImageDraw, layout_node: LayoutNode
@@ -238,9 +236,7 @@ class Renderer:
                 font = self._get_font(int(font_size), bold=True)
                 text = child.dom_node.text.strip()
                 if text:
-                    draw.text(
-                        (child.box.x, child.box.y), text, fill="black", font=font
-                    )
+                    draw.text((child.box.x, child.box.y), text, fill="black", font=font)
 
     def _render_list_item(
         self, draw: ImageDraw.ImageDraw, layout_node: LayoutNode, box: Box
@@ -249,13 +245,15 @@ class Renderer:
         if hasattr(layout_node, "marker") and layout_node.marker:
             marker_pos = getattr(layout_node, "marker_pos", (box.x - 20, box.y))
             marker_font = self._get_font(14, bold=True)
-            draw.text(
-                marker_pos, layout_node.marker, fill="black", font=marker_font
-            )
+            draw.text(marker_pos, layout_node.marker, fill="black", font=marker_font)
 
     def _render_styled_text(
-        self, draw: ImageDraw.ImageDraw, layout_node: LayoutNode,
-        bold: bool = False, italic: bool = False, underline: bool = False
+        self,
+        draw: ImageDraw.ImageDraw,
+        layout_node: LayoutNode,
+        bold: bool = False,
+        italic: bool = False,
+        underline: bool = False,
     ) -> None:
         """Render styled text (bold, italic, underline)"""
         for child in layout_node.children:
@@ -296,7 +294,9 @@ class Renderer:
                 [(box.x, box.y), (box.x, box.y + box.height)], fill="gray", width=3
             )
 
-    def _render_table_with_grid(self, draw: ImageDraw.ImageDraw, layout_node: LayoutNode, box: Box) -> None:
+    def _render_table_with_grid(
+        self, draw: ImageDraw.ImageDraw, layout_node: LayoutNode, box: Box
+    ) -> None:
         """Render table with complete grid system"""
         if box.width <= 0 or box.height <= 0:
             return
@@ -305,7 +305,7 @@ class Renderer:
         draw.rectangle(
             (box.x, box.y, box.x + box.width, box.y + box.height),
             outline="black",
-            width=1
+            width=1,
         )
 
         # Collect all rows to draw internal grid
@@ -317,22 +317,20 @@ class Renderer:
         for i, row in enumerate(rows[:-1]):  # Don't draw after last row
             y_pos = row.box.y + row.box.height
             draw.line(
-                [(box.x, y_pos), (box.x + box.width, y_pos)],
-                fill="black",
-                width=1
+                [(box.x, y_pos), (box.x + box.width, y_pos)], fill="black", width=1
             )
 
         # Draw vertical lines between columns
         # Get first row to determine column positions
         first_row = rows[0]
-        cells = [child for child in first_row.children if child.dom_node.tag in ["td", "th"]]
+        cells = [
+            child for child in first_row.children if child.dom_node.tag in ["td", "th"]
+        ]
 
         for i, cell in enumerate(cells[:-1]):  # Don't draw after last column
             x_pos = cell.box.x + cell.box.width
             draw.line(
-                [(x_pos, box.y), (x_pos, box.y + box.height)],
-                fill="black",
-                width=1
+                [(x_pos, box.y), (x_pos, box.y + box.height)], fill="black", width=1
             )
 
     def _render_table(self, draw: ImageDraw.ImageDraw, box: Box) -> None:
@@ -341,7 +339,7 @@ class Renderer:
             draw.rectangle(
                 (box.x, box.y, box.x + box.width, box.y + box.height),
                 outline="black",
-                width=1
+                width=1,
             )
 
     def _render_table_row(self, draw: ImageDraw.ImageDraw, box: Box) -> None:

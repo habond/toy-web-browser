@@ -5,6 +5,8 @@ extend-ignore =
     E203,
     # W503: line break before binary operator (conflicts with black)
     W503,
+    # I100: Import statements are in the wrong order (we use isort for this)
+    I100,
     # D100: Missing docstring in public module
     D100,
     # D104: Missing docstring in public package

@@ -5,7 +5,7 @@ Layout Engine - Computes positions and sizes of elements
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
-from .html_parser import DOMNode
+from ..parser.html_parser import DOMNode
 
 
 @dataclass
@@ -274,10 +274,9 @@ class LayoutEngine:
 
         # Calculate number of columns from the first row
         first_row = rows[0]
-        num_cols = len([
-            cell for cell in first_row.children
-            if cell.tag in ["td", "th"]
-        ])
+        num_cols = len(
+            [cell for cell in first_row.children if cell.tag in ["td", "th"]]
+        )
 
         if num_cols == 0:
             return layout_node
@@ -356,6 +355,7 @@ class LayoutEngine:
 
         # Layout cell contents with constrained width
         for child in dom_node.children:
+            child_layout = None
             if child.tag == "text":
                 # For text in table cells, use cell-specific width
                 child_layout = self._layout_text_with_width(
@@ -375,7 +375,9 @@ class LayoutEngine:
 
         return layout_node
 
-    def _layout_text_with_width(self, dom_node: DOMNode, x: float, max_width: float) -> LayoutNode:
+    def _layout_text_with_width(
+        self, dom_node: DOMNode, x: float, max_width: float
+    ) -> LayoutNode:
         """Layout text node with specific maximum width"""
         layout_node = LayoutNode(dom_node)
         text = dom_node.text.strip() if dom_node.text else ""

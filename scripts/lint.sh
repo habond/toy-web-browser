@@ -3,6 +3,11 @@
 
 set -e
 
+# Activate virtual environment if it exists
+if [ -d "venv" ]; then
+    source venv/bin/activate
+fi
+
 echo "🔍 Running linting checks..."
 
 echo "📋 Running flake8..."

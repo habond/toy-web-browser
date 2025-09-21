@@ -1,9 +1,9 @@
 """Tests for the toy web browser rendering functionality"""
 
-from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from pathlib import Path
 
 from PIL import Image
 
@@ -38,9 +38,8 @@ class TestBrowser(unittest.TestCase):
         # Check that it's a valid PNG image
         with Image.open(output_file) as img:
             self.assertEqual(img.format, "PNG", "Output should be a PNG image")
-            self.assertEqual(
-                img.size, (800, 600), "Image should have expected dimensions"
-            )
+            self.assertEqual(img.size[0], 800, "Image width should be 800px")
+            self.assertGreaterEqual(img.size[1], 600, "Image height should be at least 600px")
 
     def test_render_test2_html(self) -> None:
         """Test rendering the second example HTML file"""
@@ -56,9 +55,8 @@ class TestBrowser(unittest.TestCase):
         # Check that it's a valid PNG image
         with Image.open(output_file) as img:
             self.assertEqual(img.format, "PNG", "Output should be a PNG image")
-            self.assertEqual(
-                img.size, (800, 600), "Image should have expected dimensions"
-            )
+            self.assertEqual(img.size[0], 800, "Image width should be 800px")
+            self.assertGreaterEqual(img.size[1], 600, "Image height should be at least 600px")
 
     def test_render_test3_html(self) -> None:
         """Test rendering the third example HTML file"""
@@ -74,9 +72,8 @@ class TestBrowser(unittest.TestCase):
         # Check that it's a valid PNG image
         with Image.open(output_file) as img:
             self.assertEqual(img.format, "PNG", "Output should be a PNG image")
-            self.assertEqual(
-                img.size, (800, 600), "Image should have expected dimensions"
-            )
+            self.assertEqual(img.size[0], 800, "Image width should be 800px")
+            self.assertGreaterEqual(img.size[1], 600, "Image height should be at least 600px")
 
     def test_render_nonexistent_file(self) -> None:
         """Test that rendering a non-existent file raises FileNotFoundError"""

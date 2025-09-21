@@ -4,10 +4,11 @@ A simplified web browser that renders basic HTML to PNG images. This educational
 
 ## Features
 
-- Parses basic HTML tags (headings, paragraphs, lists, formatting)
-- Computes layout positions for elements
-- Renders HTML to PNG images
-- Supports text wrapping and basic text formatting
+- Parses basic HTML tags (headings, paragraphs, lists, tables, formatting)
+- Computes layout positions for elements with proper text wrapping
+- Renders HTML to PNG images with professional grid-based table borders
+- Supports dynamic image sizing based on content
+- Clean modular architecture with separate parser, layout, and renderer components
 
 ## Supported HTML Tags
 
@@ -16,6 +17,7 @@ A simplified web browser that renders basic HTML to PNG images. This educational
 - **Text**: `<p>`, `<br>`, `<hr>`
 - **Formatting**: `<b>`, `<i>`, `<u>`, `<strong>`, `<em>`, `<code>`
 - **Lists**: `<ul>`, `<ol>`, `<li>`
+- **Tables**: `<table>`, `<tr>`, `<td>`, `<th>` (with grid borders and header styling)
 - **Other**: `<blockquote>`, `<a>`, `<span>`
 
 ## Installation
@@ -57,10 +59,16 @@ The `--output-dir` option allows you to specify a target directory for the outpu
 toy-web-browser/
 ├── src/                    # Source code
 │   ├── __init__.py
-│   ├── browser.py         # Main browser logic
-│   ├── html_parser.py     # HTML parsing
-│   ├── layout_engine.py   # Layout computation
-│   └── renderer.py        # PNG rendering
+│   ├── browser.py         # Main browser logic and CLI
+│   ├── parser/            # HTML parsing module
+│   │   ├── __init__.py
+│   │   └── html_parser.py # DOM tree creation
+│   ├── layout/            # Layout computation module
+│   │   ├── __init__.py
+│   │   └── layout_engine.py # Position and size calculation
+│   └── renderer/          # Image rendering module
+│       ├── __init__.py
+│       └── renderer.py    # PNG image generation
 ├── tests/                 # Test suite
 │   ├── __init__.py
 │   ├── test_browser.py    # End-to-end tests
@@ -69,34 +77,63 @@ toy-web-browser/
 ├── scripts/               # Development scripts
 │   ├── format.sh          # Code formatting
 │   ├── lint.sh            # Linting checks
-│   └── render.sh          # Render HTML to PNG
+│   ├── render.sh          # Render HTML to PNG
+│   └── examples.sh        # Render all examples
 ├── fonts/                 # Project fonts
 │   ├── OpenSans-Regular.ttf
 │   ├── OpenSans-Bold.ttf
 │   ├── SourceCodePro-Regular.ttf
 │   └── README.md
 ├── examples/              # Example HTML files
+│   ├── test1.html         # Basic features demo
+│   ├── test2.html         # Text formatting
+│   ├── test3.html         # Complex nested elements
+│   ├── font_test.html     # Font rendering
+│   ├── list_test.html     # List examples
+│   └── table_test.html    # Table examples
+├── output_images/         # Generated PNG files
 ├── requirements.txt       # Python dependencies
 ├── pyproject.toml         # Tool configuration
 ├── .flake8               # Linting configuration
+├── CLAUDE.md             # Claude Code instructions
 └── README.md
 ```
 
 ## Architecture
 
-The browser consists of three main components:
+The browser follows a clean 3-stage rendering pipeline with modular components:
 
-1. **HTML Parser** (`src/html_parser.py`): Converts HTML text into a DOM tree
-2. **Layout Engine** (`src/layout_engine.py`): Calculates positions and sizes for each element
-3. **Renderer** (`src/renderer.py`): Draws the layout tree to a PNG image
+1. **HTML Parser** (`src/parser/`): Converts HTML text into a DOM tree
+   - Creates `DOMNode` objects with tag, attributes, text, and children
+   - Handles self-closing tags and basic HTML structure
+   - Supports all major HTML elements including tables
+
+2. **Layout Engine** (`src/layout/`): DOM tree → layout tree with positions
+   - Computes absolute x,y coordinates and dimensions for each element
+   - Handles text wrapping, line spacing, and table layout
+   - Uses a simple box model with configurable viewport width
+   - Specialized table layout with equal-width columns
+
+3. **Renderer** (`src/renderer/`): Layout tree → PNG image
+   - Uses PIL to draw text and basic shapes
+   - Loads fonts from `fonts/` directory (OpenSans, SourceCodePro)
+   - Handles text formatting (bold, italic, underline, code)
+   - Draws complete table grids with connected borders
 
 ## Example Files
 
 The `examples/` directory contains test HTML files:
-- `test1.html`: Basic features demo
-- `test2.html`: Text formatting examples
+- `test1.html`: Basic features demo (headings, paragraphs, lists, formatting)
+- `test2.html`: Text formatting examples (bold, italic, code, links)
 - `test3.html`: Complex nested elements and long text
 - `font_test.html`: Font rendering demonstration
+- `list_test.html`: List examples (ordered and unordered)
+- `table_test.html`: Table examples with headers and data cells
+
+Run all examples at once:
+```bash
+./scripts/examples.sh
+```
 
 ## Fonts
 
@@ -111,8 +148,10 @@ All fonts are included in the `fonts/` directory and are licensed under the SIL 
 - No CSS support
 - No JavaScript support
 - No network requests (local files only)
-- Basic font rendering
+- Basic font rendering (no font-family CSS)
 - Fixed viewport width (800px)
+- Tables use equal-width columns only
+- No table spanning (colspan/rowspan)
 
 ## Development
 
