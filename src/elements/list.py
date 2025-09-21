@@ -29,7 +29,6 @@ class ListElement(BaseElement):
         for i, child in enumerate(self.dom_node.children):
             if child.tag == "li":
                 # Handle list items specially to pass index and ordered parameters
-                saved_y = layout_engine.current_y
                 child_layout = self._layout_list_item(
                     layout_engine,
                     child,
@@ -62,8 +61,7 @@ class ListElement(BaseElement):
         index: int,
         ordered: bool,
     ) -> Optional[LayoutNode]:
-        """Helper to layout a list item with proper parameters"""
-
+        """Layout a list item with proper parameters"""
         # Import here to avoid circular imports
         from .element_factory import ElementFactory
 

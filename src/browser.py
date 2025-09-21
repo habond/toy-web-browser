@@ -7,6 +7,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from .config import config
 from .html_parser import HTMLParser
 from .layout_engine import LayoutEngine
 from .renderer import Renderer
@@ -30,9 +31,9 @@ def render_html(input_file: Path, output_file: Path) -> None:
     layout_tree = layout_engine.compute_layout(dom_tree)
 
     # Render to image with calculated height
-    # Add padding, minimum 600px
-    content_height = max(int(layout_tree.box.height) + 20, 600)
-    renderer = Renderer(width=800, height=content_height)
+    # Add padding, minimum height from config
+    content_height = max(int(layout_tree.box.height) + 20, config.MIN_HEIGHT)
+    renderer = Renderer(width=config.VIEWPORT_WIDTH, height=content_height)
     image = renderer.render(layout_tree)
 
     # Ensure output directory exists

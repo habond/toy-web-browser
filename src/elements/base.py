@@ -35,7 +35,7 @@ class BaseElement(ABC):
     def _create_layout_node(
         self, x: float, y: float, width: float, height: float
     ) -> LayoutNode:
-        """Helper to create a layout node with the given dimensions"""
+        """Create a layout node with the given dimensions"""
         layout_node = LayoutNode(self.dom_node)
         layout_node.box = Box(x, y, width, height)
         return layout_node

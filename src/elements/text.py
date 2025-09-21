@@ -2,16 +2,17 @@
 Text element implementation
 """
 
-from typing import List, Optional
+from typing import Optional
 
 from PIL import ImageDraw
 
 from ..layout_engine import LayoutEngine, LayoutNode
+from ..layout_utils import LayoutMixin, LayoutUtils
 from ..renderer import Renderer
 from .base import BaseElement
 
 
-class TextElement(BaseElement):
+class TextElement(BaseElement, LayoutMixin):
     """Text element for rendering text content"""
 
     def layout(
@@ -23,30 +24,10 @@ class TextElement(BaseElement):
         if not text:
             return None
 
-        # Simple text wrapping
-        words = text.split()
-        lines: List[str] = []
-        current_line: List[str] = []
-        line_width = 0
+        # Use layout utils for text wrapping
         max_width = kwargs.get("max_width", viewport_width - 2 * x)
-        char_width = 8  # Approximate character width
-
-        for word in words:
-            word_width = len(word) * char_width
-            if line_width + word_width > max_width and current_line:
-                lines.append(" ".join(current_line))
-                current_line = [word]
-                line_width = word_width
-            else:
-                current_line.append(word)
-                line_width += word_width + char_width
-
-        if current_line:
-            lines.append(" ".join(current_line))
-
-        height = (
-            len(lines) * layout_engine.DEFAULT_FONT_SIZE * layout_engine.LINE_HEIGHT
-        )
+        lines = LayoutUtils.wrap_text(text, max_width)
+        height = LayoutUtils.compute_text_height(lines, layout_engine.DEFAULT_FONT_SIZE)
         layout_node = self._create_layout_node(
             x, layout_engine.current_y, max_width, height
         )

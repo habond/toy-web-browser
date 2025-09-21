@@ -5,6 +5,7 @@ Layout Engine - Computes positions and sizes of elements
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
+from .config import config
 from .html_parser import DOMNode
 
 
@@ -38,23 +39,34 @@ class LayoutNode:
 class LayoutEngine:
     """Computes layout for DOM nodes"""
 
-    DEFAULT_FONT_SIZE: int = 16
-    LINE_HEIGHT: float = 1.5
-    MARGIN: int = 10
-    PADDING: int = 5
-
-    HEADING_SIZES: dict[str, float] = {
-        "h1": 2.0,
-        "h2": 1.75,
-        "h3": 1.5,
-        "h4": 1.25,
-        "h5": 1.1,
-        "h6": 1.0,
-    }
-
-    def __init__(self, viewport_width: int = 800) -> None:
-        self.viewport_width: int = viewport_width
+    def __init__(self, viewport_width: int = None) -> None:
+        self.viewport_width: int = viewport_width or config.VIEWPORT_WIDTH
         self.current_y: float = 0
+
+    @property
+    def DEFAULT_FONT_SIZE(self) -> int:
+        """Get default font size from config"""
+        return config.DEFAULT_FONT_SIZE
+
+    @property
+    def LINE_HEIGHT(self) -> float:
+        """Get line height from config"""
+        return config.LINE_HEIGHT
+
+    @property
+    def MARGIN(self) -> int:
+        """Get margin from config"""
+        return config.MARGIN
+
+    @property
+    def PADDING(self) -> int:
+        """Get padding from config"""
+        return config.PADDING
+
+    @property
+    def HEADING_SIZES(self) -> dict[str, float]:
+        """Get heading sizes from config"""
+        return config.HEADING_SIZES
 
     def compute_layout(self, dom_root: DOMNode) -> LayoutNode:
         """Compute layout for entire DOM tree"""
@@ -64,7 +76,7 @@ class LayoutEngine:
         for child in dom_root.children:
             if child.tag != "text" or (child.text and child.text.strip()):
                 child_layout = self._layout_child(
-                    child, layout_root.box.x + self.MARGIN
+                    child, layout_root.box.x + config.MARGIN
                 )
                 if child_layout:
                     layout_root.add_child(child_layout)
