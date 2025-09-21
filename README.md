@@ -1,5 +1,11 @@
 # Toy Web Browser
 
+[![Tests](https://github.com/habond/toy-web-browser/actions/workflows/test.yml/badge.svg)](https://github.com/habond/toy-web-browser/actions/workflows/test.yml)
+[![CI/CD Pipeline](https://github.com/habond/toy-web-browser/actions/workflows/ci.yml/badge.svg)](https://github.com/habond/toy-web-browser/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/habond/toy-web-browser/branch/main/graph/badge.svg)](https://codecov.io/gh/habond/toy-web-browser)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 A simplified web browser that renders basic HTML to PNG images. This educational project demonstrates the core concepts of browser rendering without the complexity of CSS, JavaScript, or network requests.
 
 🎨 **Recently Refactored** for improved maintainability with centralized configuration, modular font management, comprehensive error handling, and enhanced code organization.
@@ -345,6 +351,31 @@ pre-commit autoupdate
 - **Example Validation**: Verification that all examples render successfully
 
 Pre-commit hooks ensure consistent code quality and prevent common issues from being committed. They run automatically on `git commit` and will block commits that fail quality checks.
+
+### Continuous Integration 🚀
+
+The project includes comprehensive GitHub Actions workflows for automated quality assurance:
+
+**Test Workflow (`.github/workflows/test.yml`)**:
+- ✅ **Multi-Python Testing**: Tests on Python 3.10, 3.11, and 3.12
+- ✅ **Quality Checks**: Automated linting, type checking, and formatting validation
+- ✅ **Test Coverage**: 90% coverage reporting with Codecov integration
+- ✅ **Example Validation**: Ensures all examples render successfully
+- ✅ **Cross-Platform**: Tests on Ubuntu with proper font dependencies
+
+**Comprehensive CI Pipeline (`.github/workflows/ci.yml`)**:
+- 🔍 **Security Scanning**: Bandit security analysis and vulnerability checking
+- ⚡ **Performance Testing**: Rendering benchmarks and memory usage validation
+- 📚 **Documentation Validation**: Link checking and content verification
+- 🌐 **Platform Compatibility**: Cross-platform testing (Ubuntu, Windows, macOS)
+
+**Quality Gates**:
+- All tests must pass (308 tests, 90% coverage)
+- Zero linting violations (flake8, mypy, black, isort)
+- Security scan approval
+- Performance benchmarks within acceptable limits
+
+The CI pipeline runs automatically on every push to `main` and all pull requests, ensuring consistent code quality and preventing regressions.
 
 ### Modern Configuration Management 🆕
 
