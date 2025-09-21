@@ -1,0 +1,39 @@
+[flake8]
+max-line-length = 88
+extend-ignore =
+    # E203: whitespace before ':' (conflicts with black)
+    E203,
+    # W503: line break before binary operator (conflicts with black)
+    W503,
+    # D100: Missing docstring in public module
+    D100,
+    # D104: Missing docstring in public package
+    D104,
+    # D200: One-line docstring should fit on one line with quotes
+    D200,
+    # D400: First line should end with a period
+    D400,
+    # D102: Missing docstring in public method
+    D102,
+    # D103: Missing docstring in public function
+    D103,
+    # D105: Missing docstring in magic method
+    D105,
+    # D107: Missing docstring in __init__
+    D107
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    build,
+    dist,
+    *.egg-info
+per-file-ignores =
+    # Tests don't need strict docstring requirements
+    tests/*:D101,D102,D103,D105,D107
+    # Allow long lines in test files
+    tests/*:E501
+max-complexity = 15
+import-order-style = google
+application-import-names = src
