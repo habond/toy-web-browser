@@ -29,8 +29,9 @@ def render_html(input_file: Path, output_file: Path) -> None:
     layout_engine = LayoutEngine()
     layout_tree = layout_engine.compute_layout(dom_tree)
 
-    # Render to image
-    renderer = Renderer(width=800, height=600)
+    # Render to image with calculated height
+    content_height = max(int(layout_tree.box.height) + 20, 600)  # Add padding, minimum 600px
+    renderer = Renderer(width=800, height=content_height)
     image = renderer.render(layout_tree)
 
     # Ensure output directory exists

@@ -54,6 +54,10 @@ class HTMLParser(BaseHTMLParser):
         "hr",
         "blockquote",
         "pre",
+        "table",
+        "tr",
+        "td",
+        "th",
     }
     INLINE_TAGS: set[str] = {"a", "span", "b", "i", "u", "strong", "em", "code"}
     VOID_TAGS: set[str] = {"br", "hr", "img"}

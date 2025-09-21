@@ -101,6 +101,15 @@ class LayoutEngine:
         elif dom_node.tag in ["b", "i", "u", "strong", "em", "code", "span", "a"]:
             return self._layout_inline(dom_node, x)
 
+        elif dom_node.tag == "table":
+            return self._layout_table(dom_node, x)
+
+        elif dom_node.tag == "tr":
+            return self._layout_table_row(dom_node, x)
+
+        elif dom_node.tag in ["td", "th"]:
+            return self._layout_table_cell(dom_node, x)
+
         else:
             # Default block layout
             return self._layout_block(dom_node, x)
@@ -247,5 +256,154 @@ class LayoutEngine:
             child_layout = self._layout_node(child, x)
             if child_layout:
                 layout_node.add_child(child_layout)
+
+        return layout_node
+
+    def _layout_table(self, dom_node: DOMNode, x: float) -> LayoutNode:
+        """Layout table element"""
+        layout_node = LayoutNode(dom_node)
+        layout_node.box = Box(x, self.current_y, self.viewport_width - 2 * x, 0)
+
+        start_y = self.current_y
+        self.current_y += self.MARGIN
+
+        # First pass: collect all rows to calculate column widths
+        rows = [child for child in dom_node.children if child.tag == "tr"]
+        if not rows:
+            return layout_node
+
+        # Calculate number of columns from the first row
+        first_row = rows[0]
+        num_cols = len([
+            cell for cell in first_row.children
+            if cell.tag in ["td", "th"]
+        ])
+
+        if num_cols == 0:
+            return layout_node
+
+        # Simple equal column width distribution
+        table_width = self.viewport_width - 2 * x - 2 * self.PADDING
+        col_width = table_width / num_cols
+
+        # Layout each row
+        for row in rows:
+            row_layout = self._layout_table_row_with_width(row, x, col_width, num_cols)
+            if row_layout:
+                layout_node.add_child(row_layout)
+
+        self.current_y += self.MARGIN
+        layout_node.box.height = self.current_y - start_y
+
+        return layout_node
+
+    def _layout_table_row(self, dom_node: DOMNode, x: float) -> LayoutNode:
+        """Layout table row element (fallback when not called from table)"""
+        return self._layout_table_row_with_width(dom_node, x, 100, 1)
+
+    def _layout_table_row_with_width(
+        self, dom_node: DOMNode, x: float, col_width: float, num_cols: int
+    ) -> LayoutNode:
+        """Layout table row with specified column width"""
+        layout_node = LayoutNode(dom_node)
+        layout_node.box = Box(x, self.current_y, self.viewport_width - 2 * x, 0)
+
+        start_y = self.current_y
+        row_height = 0.0
+
+        # Layout cells horizontally
+        current_x = x + self.PADDING
+        cell_index = 0
+
+        for child in dom_node.children:
+            if child.tag in ["td", "th"] and cell_index < num_cols:
+                saved_y = self.current_y
+                self.current_y = start_y + self.PADDING
+
+                cell_layout = self._layout_table_cell_with_width(
+                    child, current_x, col_width - 2 * self.PADDING
+                )
+                if cell_layout:
+                    layout_node.add_child(cell_layout)
+                    # Track the maximum height for this row
+                    cell_height = self.current_y - start_y - self.PADDING
+                    row_height = max(row_height, cell_height)
+
+                self.current_y = saved_y
+                current_x += col_width
+                cell_index += 1
+
+        # Set the row height and advance current_y
+        min_height = self.DEFAULT_FONT_SIZE * self.LINE_HEIGHT
+        row_height = max(row_height, min_height)
+        self.current_y = start_y + row_height + 2 * self.PADDING
+        layout_node.box.height = row_height + 2 * self.PADDING
+
+        return layout_node
+
+    def _layout_table_cell(self, dom_node: DOMNode, x: float) -> LayoutNode:
+        """Layout table cell element (fallback when not called from table)"""
+        return self._layout_table_cell_with_width(dom_node, x, 100)
+
+    def _layout_table_cell_with_width(
+        self, dom_node: DOMNode, x: float, width: float
+    ) -> LayoutNode:
+        """Layout table cell with specified width"""
+        layout_node = LayoutNode(dom_node)
+        layout_node.box = Box(x, self.current_y, width, 0)
+
+        start_y = self.current_y
+
+        # Layout cell contents with constrained width
+        for child in dom_node.children:
+            if child.tag == "text":
+                # For text in table cells, use cell-specific width
+                child_layout = self._layout_text_with_width(
+                    child, x + self.PADDING, width - 2 * self.PADDING
+                )
+            else:
+                child_layout = self._layout_node(child, x + self.PADDING)
+            if child_layout:
+                layout_node.add_child(child_layout)
+
+        # Ensure minimum height for empty cells
+        if self.current_y == start_y:
+            min_height = self.DEFAULT_FONT_SIZE * self.LINE_HEIGHT
+            self.current_y += min_height
+
+        layout_node.box.height = self.current_y - start_y
+
+        return layout_node
+
+    def _layout_text_with_width(self, dom_node: DOMNode, x: float, max_width: float) -> LayoutNode:
+        """Layout text node with specific maximum width"""
+        layout_node = LayoutNode(dom_node)
+        text = dom_node.text.strip() if dom_node.text else ""
+
+        if text:
+            # Simple text wrapping with specified max width
+            words = text.split()
+            lines: List[str] = []
+            current_line: List[str] = []
+            line_width = 0
+            char_width = 8  # Approximate character width
+
+            for word in words:
+                word_width = len(word) * char_width
+                if line_width + word_width > max_width and current_line:
+                    lines.append(" ".join(current_line))
+                    current_line = [word]
+                    line_width = word_width
+                else:
+                    current_line.append(word)
+                    line_width += word_width + char_width
+
+            if current_line:
+                lines.append(" ".join(current_line))
+
+            height = len(lines) * self.DEFAULT_FONT_SIZE * self.LINE_HEIGHT
+            layout_node.box = Box(x, self.current_y, max_width, height)
+            layout_node.lines = lines  # Store lines for rendering
+            self.current_y += height
 
         return layout_node
