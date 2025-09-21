@@ -2,9 +2,11 @@
 Block element implementations
 """
 
+from typing import Any
+
 from PIL import ImageDraw
 
-from ..layout_engine import LayoutEngine, LayoutNode
+from ..layout_engine import Box, LayoutEngine, LayoutNode
 from ..renderer import Renderer
 from .base import BaseElement
 
@@ -13,7 +15,7 @@ class BlockElement(BaseElement):
     """Block-level element (p, div, blockquote, pre)"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> LayoutNode:
         """Layout block-level element"""
         layout_node = self._create_layout_node(
@@ -45,7 +47,7 @@ class BlockElement(BaseElement):
         for child in layout_node.children:
             renderer._render_node(draw, child)
 
-    def _render_blockquote_border(self, draw: ImageDraw.ImageDraw, box) -> None:
+    def _render_blockquote_border(self, draw: ImageDraw.ImageDraw, box: Box) -> None:
         """Draw left border for blockquote"""
         draw.rectangle(
             (box.x - 5, box.y, box.x - 3, box.y + box.height), fill="#cccccc"

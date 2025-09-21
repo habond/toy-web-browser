@@ -56,12 +56,12 @@ class TableCellElement(BaseElement):
         # Draw background for header cells
         if self.dom_node.tag == "th":
             draw.rectangle(
-                [
+                (
                     layout_node.box.x,
                     layout_node.box.y,
                     layout_node.box.x + layout_node.box.width,
                     layout_node.box.y + layout_node.box.height,
-                ],
+                ),
                 fill="#f0f0f0",
             )
 

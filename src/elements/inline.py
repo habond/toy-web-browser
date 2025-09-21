@@ -56,8 +56,8 @@ class InlineElement(BaseElement):
         # Choose text color
         color = "#0066cc" if is_link else "black"
 
-        y_offset = 0
-        line_height = renderer.DEFAULT_FONT_SIZE * renderer.LINE_HEIGHT
+        y_offset: float = 0
+        line_height: float = renderer.DEFAULT_FONT_SIZE * renderer.LINE_HEIGHT
 
         for line in layout_node.lines or []:
             if line.strip():

@@ -2,7 +2,7 @@
 Text element implementation
 """
 
-from typing import Optional
+from typing import Any, Optional
 
 from PIL import ImageDraw
 
@@ -16,7 +16,7 @@ class TextElement(BaseElement, LayoutMixin):
     """Text element for rendering text content"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> Optional[LayoutNode]:
         """Layout text with word wrapping"""
         text = self.dom_node.text.strip() if self.dom_node.text else ""
@@ -44,8 +44,8 @@ class TextElement(BaseElement, LayoutMixin):
             return
 
         font = renderer._get_font()
-        y_offset = 0
-        line_height = renderer.DEFAULT_FONT_SIZE * renderer.LINE_HEIGHT
+        y_offset: float = 0
+        line_height: float = renderer.DEFAULT_FONT_SIZE * renderer.LINE_HEIGHT
 
         for line in layout_node.lines:
             if line.strip():

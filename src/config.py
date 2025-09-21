@@ -2,7 +2,8 @@
 Centralized configuration for the toy web browser
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Dict
 
 
 @dataclass
@@ -21,19 +22,16 @@ class BrowserConfig:
     MIN_HEIGHT: int = 600
 
     # Heading size multipliers
-    HEADING_SIZES: dict[str, float] = None
-
-    def __post_init__(self) -> None:
-        """Initialize computed values after dataclass creation"""
-        if self.HEADING_SIZES is None:
-            self.HEADING_SIZES = {
-                "h1": 2.0,
-                "h2": 1.75,
-                "h3": 1.5,
-                "h4": 1.25,
-                "h5": 1.1,
-                "h6": 1.0,
-            }
+    HEADING_SIZES: Dict[str, float] = field(
+        default_factory=lambda: {
+            "h1": 2.0,
+            "h2": 1.75,
+            "h3": 1.5,
+            "h4": 1.25,
+            "h5": 1.1,
+            "h6": 1.0,
+        }
+    )
 
 
 # Global configuration instance

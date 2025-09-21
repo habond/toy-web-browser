@@ -58,7 +58,7 @@ repos:
       - id: mypy
         description: "Type check Python code with mypy"
         additional_dependencies: [types-Pillow>=10.0.0]
-        args: [--config-file=mypy.ini, --ignore-missing-imports, --disable-error-code=misc, --disable-error-code=assignment, --disable-error-code=arg-type, --disable-error-code=return, --disable-error-code=no-untyped-def, --disable-error-code=unreachable, --disable-error-code=no-any-return, --disable-error-code=union-attr]
+        args: [--config-file=mypy.ini, --disable-error-code=no-untyped-def, --disable-error-code=no-any-return]
 
   # Python security linting with bandit
   - repo: https://github.com/pycqa/bandit

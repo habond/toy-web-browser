@@ -113,9 +113,15 @@ class FontManager:
     ) -> Tuple[int, int]:
         """Get the size of text when rendered with the given font"""
         try:
-            # Try the newer textbbox method first
+            # Try the newer textbbox method first (PIL 8.0.0+)
             bbox = font.getbbox(text)
             return (bbox[2] - bbox[0], bbox[3] - bbox[1])
         except AttributeError:
-            # Fall back to the older textsize method
-            return font.getsize(text)
+            try:
+                # Fall back to the older textsize method for older PIL versions
+                # pylint: disable=no-member
+                size = font.getsize(text)  # type: ignore[union-attr]
+                return size
+            except AttributeError:
+                # Ultimate fallback for very old or unusual font objects
+                return (len(text) * 8, 16)  # Rough estimate

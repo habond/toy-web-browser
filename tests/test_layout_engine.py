@@ -1,6 +1,7 @@
 """Tests for the layout engine module"""
 
 import unittest
+from typing import Optional
 
 from src.html_parser import DOMNode, HTMLParser
 from src.layout_engine import Box, LayoutEngine, LayoutNode
@@ -76,16 +77,17 @@ class TestLayoutEngine(unittest.TestCase):
         layout_tree = self.layout_engine.compute_layout(dom_tree)
 
         # Find the text layout node
-        def find_text_node(node: LayoutNode) -> LayoutNode:
+        def find_text_node(node: LayoutNode) -> Optional[LayoutNode]:
             if node.dom_node.tag == "text":
                 return node
             for child in node.children:
                 result = find_text_node(child)
                 if result:
                     return result
+            return None
 
         text_node = find_text_node(layout_tree)
-        if text_node and hasattr(text_node, "lines"):
+        if text_node and hasattr(text_node, "lines") and text_node.lines:
             # Should have multiple lines due to wrapping
             self.assertGreater(len(text_node.lines), 1)
 

@@ -129,7 +129,7 @@ class ListItemElement(BaseElement):
             font = renderer._get_font()
             draw.text(
                 layout_node.marker_pos,
-                layout_node.marker,
+                layout_node.marker or "",
                 fill="black",
                 font=font,
             )

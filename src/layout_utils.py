@@ -26,10 +26,10 @@ class LayoutUtils:
         words = text.split()
         lines: List[str] = []
         current_line: List[str] = []
-        line_width = 0
+        line_width: float = 0
 
         for word in words:
-            word_width = len(word) * char_width
+            word_width: float = len(word) * char_width
             if line_width + word_width > max_width and current_line:
                 lines.append(" ".join(current_line))
                 current_line = [word]

@@ -2,6 +2,8 @@
 Heading element implementation
 """
 
+from typing import Any
+
 from PIL import ImageDraw
 
 from ..config import config
@@ -14,7 +16,7 @@ class HeadingElement(BaseElement):
     """Heading element (h1-h6)"""
 
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> LayoutNode:
         """Layout heading element"""
         size_multiplier = config.HEADING_SIZES.get(self.dom_node.tag, 1.0)
@@ -56,8 +58,8 @@ class HeadingElement(BaseElement):
         for child in layout_node.children:
             if hasattr(child, "font_size") and hasattr(child, "lines") and child.lines:
                 font = renderer._get_font(size=int(child.font_size or 16), bold=True)
-                y_offset = 0
-                line_height = (child.font_size or 16) * renderer.LINE_HEIGHT
+                y_offset: float = 0
+                line_height: float = (child.font_size or 16) * renderer.LINE_HEIGHT
 
                 for line in child.lines:
                     if line.strip():
