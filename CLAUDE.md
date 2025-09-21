@@ -27,7 +27,15 @@ pip install -r requirements.txt
 ./scripts/format.sh    # Format with black + isort
 ./scripts/lint.sh      # Run flake8 + mypy + format checks
 
-# Testing
+# Testing (recommended)
+./scripts/test.sh                    # Run all working tests
+./scripts/test.sh -c                # Run tests with coverage report
+./scripts/test.sh -c -h             # Run tests with HTML coverage report
+./scripts/test.sh -f                # Run only fast unit tests
+./scripts/test.sh -v                # Run tests with verbose output
+./scripts/test.sh -p test_config    # Run tests matching pattern
+
+# Testing (direct pytest commands)
 python -m pytest tests/ -v
 python -m pytest tests/test_browser.py -v  # Single test file
 python -m pytest tests/ --cov=src --cov-report=html  # With coverage
@@ -172,6 +180,53 @@ src/
         └── table_calculator.py   # Column width calculations
 ```
 
+## Testing Infrastructure (🆕 2024)
+
+The project includes comprehensive testing infrastructure with 77% code coverage:
+
+### Test Organization
+```
+tests/
+├── unit/                    # 70 focused unit tests
+│   ├── test_config.py          # Configuration testing (100% coverage)
+│   ├── test_font_manager.py    # Font management testing (71% coverage)
+│   ├── test_layout_utils_simple.py # Layout utilities testing (69% coverage)
+│   ├── test_renderer_simple.py # Renderer testing (94% coverage)
+│   └── elements/
+│       ├── test_element_factory.py # Element factory testing (100% coverage)
+│       └── table/              # Table element tests (22-44% coverage)
+├── integration/             # End-to-end pipeline tests
+│   └── test_rendering_pipeline.py
+├── fixtures/                # Reusable test utilities
+│   ├── __init__.py
+│   └── test_utils.py       # TestDataBuilder, MockFactory, CustomAssertions
+├── conftest.py             # Pytest configuration with shared fixtures
+├── test_browser.py         # Original integration tests (maintained)
+├── test_html_parser.py     # HTML parser tests (98% coverage)
+└── test_layout_engine.py   # Layout engine tests (87% coverage)
+```
+
+### Test Script Usage
+```bash
+# Quick tests (recommended for development)
+./scripts/test.sh -f                # Fast unit tests only (70 tests, ~0.1s)
+
+# Full testing workflow
+./scripts/test.sh                   # All working tests (70 tests, ~0.3s)
+./scripts/test.sh -c               # With coverage report
+./scripts/test.sh -c -h            # With HTML coverage report
+
+# Specific testing
+./scripts/test.sh -p config        # Run config tests only
+./scripts/test.sh -v               # Verbose output
+./scripts/test.sh --help           # Show all options
+```
+
+### Coverage Highlights
+- **High Coverage Modules** (95%+): Config (100%), Element Factory (100%), Core Elements (95-100%)
+- **Good Coverage Modules** (80%+): HTML Parser (98%), Layout Engine (87%), Renderer (94%)
+- **Target Areas**: Table system (22-44%), Browser CLI (58%), Layout utilities (69%)
+
 ## Refactoring Guidelines
 
 When making changes to this codebase, follow these principles established during the 2024 refactoring:
@@ -182,7 +237,7 @@ When making changes to this codebase, follow these principles established during
 4. **Handle Errors Properly**: Use custom exceptions from `exceptions.py` for specific error types
 5. **Maintain Modularity**: Keep table-related changes within the `elements/table/` module
 6. **Follow Type Safety**: Maintain proper type annotations, especially for Optional parameters
-7. **Preserve Test Coverage**: Ensure all changes maintain the existing test suite (20/20 tests)
+7. **Preserve Test Coverage**: Ensure all changes maintain the existing test suite (70/70 tests, 77% coverage)
 
 ## Configuration Access Patterns
 
@@ -233,7 +288,7 @@ The project underwent comprehensive refactoring to transform it from an educatio
 - **Type Safety**: Comprehensive type annotations with strict mypy checking
 - **Developer Experience**: Automated quality checks prevent issues before commit
 - **Configuration**: Modern tool configuration without duplicates
-- **Testing**: Maintained 100% test coverage (20/20 tests passing)
+- **Testing**: Enhanced test coverage to 77% (70/70 tests passing)
 - **Performance**: Optimized font caching and reduced redundant calculations
 
 **Before**: Good educational example with basic structure

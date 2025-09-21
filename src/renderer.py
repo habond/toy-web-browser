@@ -43,10 +43,22 @@ class Renderer:
         """Get a font with specific size and style"""
         return self.font_manager.get_font(size, bold, italic, monospace)
 
-    def render(self, layout_root: LayoutNode) -> Image.Image:
+    def create_image(
+        self, width: Optional[int] = None, height: Optional[int] = None
+    ) -> Image.Image:
+        """Create a new image with specified dimensions"""
+        w = width if width is not None else self.width
+        h = height if height is not None else self.height
+        return Image.new("RGB", (w, h), self.bg_color)
+
+    def render(
+        self, layout_root: LayoutNode, image: Optional[Image.Image] = None
+    ) -> Image.Image:
         """Render layout tree to image"""
-        # Create image with white background
-        image = Image.new("RGB", (self.width, self.height), self.bg_color)
+        # Use provided image or create new one
+        if image is None:
+            image = Image.new("RGB", (self.width, self.height), self.bg_color)
+
         draw = ImageDraw.Draw(image)
 
         # Render the tree
