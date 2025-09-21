@@ -21,7 +21,7 @@ class BrowserConfig:
     MIN_HEIGHT: int = 600
 
     # Heading size multipliers
-    HEADING_SIZES: dict[str, float] = None  # type: ignore
+    HEADING_SIZES: dict[str, float] = None
 
     def __post_init__(self) -> None:
         """Initialize computed values after dataclass creation"""

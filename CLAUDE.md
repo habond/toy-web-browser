@@ -41,6 +41,22 @@ flake8 src/ tests/           # Linting
 isort src/ tests/            # Import sorting
 ```
 
+### Pre-commit Hooks
+```bash
+# Setup and usage (included in requirements.txt)
+pre-commit install           # Install hooks (one time)
+pre-commit run --all-files   # Run all hooks manually
+pre-commit autoupdate        # Update hook versions
+
+# Hooks run automatically on git commit and include:
+# - File safety checks (whitespace, EOF, merge conflicts)
+# - Import sorting and code formatting
+# - Linting and type checking
+# - Security scanning
+# - Full test suite execution
+# - Example rendering validation
+```
+
 ## Architecture
 
 The browser follows a clean 3-stage rendering pipeline with enhanced modularity and supporting systems:

@@ -276,6 +276,34 @@ flake8 src/ tests/                # Lint code
 isort src/ tests/                 # Sort imports
 ```
 
+### Pre-commit Hooks 🆕
+
+The project now includes comprehensive pre-commit hooks that automatically run quality checks before each commit:
+
+```bash
+# Install pre-commit hooks (one time setup)
+pip install pre-commit
+pre-commit install
+
+# Run hooks manually on all files
+pre-commit run --all-files
+
+# Update hook versions
+pre-commit autoupdate
+```
+
+**Automated Quality Checks:**
+- **File Safety**: Trailing whitespace, end-of-file fixes, merge conflict detection
+- **Import Sorting**: Automatic import organization with isort
+- **Code Formatting**: Consistent styling with black
+- **Linting**: Code quality checks with flake8 and docstring validation
+- **Type Checking**: Static analysis with mypy (configured for educational use)
+- **Security**: Basic security scanning with bandit
+- **Testing**: Full test suite execution to ensure functionality
+- **Example Validation**: Verification that all examples render successfully
+
+Pre-commit hooks ensure consistent code quality and prevent common issues from being committed. They run automatically on `git commit` and will block commits that fail quality checks.
+
 ## Recent Refactoring (2024)
 
 The project underwent a comprehensive refactoring to improve maintainability:

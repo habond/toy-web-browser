@@ -2,7 +2,10 @@
 Renderer - Renders the layout tree to a PNG image
 """
 
-from PIL import Image, ImageDraw
+from typing import Optional, Union
+
+from PIL import Image, ImageDraw, ImageFont
+from PIL.ImageFont import FreeTypeFont
 
 from .config import config
 from .font_manager import FontManager
@@ -32,11 +35,11 @@ class Renderer:
 
     def _get_font(
         self,
-        size: int = None,
+        size: Optional[int] = None,
         bold: bool = False,
         italic: bool = False,
         monospace: bool = False,
-    ):
+    ) -> Union[FreeTypeFont, ImageFont.ImageFont]:
         """Get a font with specific size and style"""
         return self.font_manager.get_font(size, bold, italic, monospace)
 

@@ -1,0 +1,110 @@
+# Pre-commit configuration for toy web browser
+# Runs code quality checks before each commit
+
+repos:
+  # Built-in pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        description: "Remove trailing whitespace"
+      - id: end-of-file-fixer
+        description: "Ensure files end with newline"
+      - id: check-yaml
+        description: "Check YAML syntax"
+      - id: check-toml
+        description: "Check TOML syntax"
+      - id: check-json
+        description: "Check JSON syntax"
+      - id: check-merge-conflict
+        description: "Check for merge conflict markers"
+      - id: check-added-large-files
+        description: "Prevent large files from being committed"
+        args: ['--maxkb=1000']
+      - id: mixed-line-ending
+        description: "Check for mixed line endings"
+        args: ['--fix=lf']
+
+  # Python import sorting with isort
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        description: "Sort Python imports"
+        args: ["--profile", "black", "--filter-files"]
+
+  # Python code formatting with black
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        description: "Format Python code with black"
+        language_version: python3
+
+  # Python linting with flake8
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        description: "Lint Python code with flake8"
+        additional_dependencies:
+          - flake8-docstrings>=1.7.0
+          - flake8-import-order>=0.18.0
+
+  # Python type checking with mypy
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.14.1
+    hooks:
+      - id: mypy
+        description: "Type check Python code with mypy"
+        additional_dependencies: [types-Pillow>=10.0.0]
+        args: [--config-file=mypy.ini, --ignore-missing-imports, --disable-error-code=misc, --disable-error-code=assignment, --disable-error-code=arg-type, --disable-error-code=return, --disable-error-code=no-untyped-def, --disable-error-code=unreachable, --disable-error-code=no-any-return, --disable-error-code=union-attr]
+
+  # Python security linting with bandit
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.8.0
+    hooks:
+      - id: bandit
+        description: "Check for security issues with bandit"
+        args: ["-r", "src/"]
+        exclude: "tests/"
+
+  # Local custom hooks for project-specific checks
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run pytest
+        description: "Run all tests to ensure functionality"
+        entry: bash -c "source venv/bin/activate && python -m pytest tests/ -v --tb=short"
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true
+
+      - id: test-examples
+        name: Test example rendering
+        description: "Ensure all examples can be rendered successfully"
+        entry: ./scripts/examples.sh
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true
+
+# Configuration for specific tools
+default_language_version:
+  python: python3
+
+# Files to exclude from all hooks
+exclude: |
+  (?x)^(
+    venv/.*|
+    \.git/.*|
+    \.mypy_cache/.*|
+    \.pytest_cache/.*|
+    __pycache__/.*|
+    output_images/.*
+  )$
+
+# Global configuration
+fail_fast: false  # Run all hooks even if one fails
+minimum_pre_commit_version: '3.0.0'

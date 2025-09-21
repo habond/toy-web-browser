@@ -3,7 +3,7 @@ Base element class for HTML elements
 """
 
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Any, Optional
 
 from PIL import ImageDraw
 
@@ -20,7 +20,7 @@ class BaseElement(ABC):
 
     @abstractmethod
     def layout(
-        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
     ) -> Optional[LayoutNode]:
         """Compute layout for this element"""
         pass

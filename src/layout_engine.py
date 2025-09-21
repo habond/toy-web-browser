@@ -39,7 +39,7 @@ class LayoutNode:
 class LayoutEngine:
     """Computes layout for DOM nodes"""
 
-    def __init__(self, viewport_width: int = None) -> None:
+    def __init__(self, viewport_width: Optional[int] = None) -> None:
         self.viewport_width: int = viewport_width or config.VIEWPORT_WIDTH
         self.current_y: float = 0
 

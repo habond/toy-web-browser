@@ -56,7 +56,7 @@ class FontManager:
                 self.mono_font = ImageFont.truetype(
                     str(mono_font_path), config.DEFAULT_FONT_SIZE
                 )
-            except Exception:
+            except (OSError, IOError):
                 # Non-critical error, we can fall back to default
                 pass
 
