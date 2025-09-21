@@ -1,8 +1,6 @@
 """Tests for the TableCellElement class"""
 
-from unittest.mock import Mock, patch
-
-import pytest
+from unittest.mock import Mock
 
 from src.config import BrowserConfig
 from src.elements.table.table_cell_element import TableCellElement
@@ -20,7 +18,7 @@ class TestTableCellElement:
         self.layout_engine = LayoutEngine()
 
     def create_cell_with_text(self, text: str, tag: str = "td") -> DOMNode:
-        """Helper to create table cell DOM with text"""
+        """Create table cell DOM with text"""
         cell_dom = DOMNode(tag)
         text_dom = DOMNode("text", text=text)
         cell_dom.add_child(text_dom)

@@ -1,7 +1,5 @@
 """Tests for the element factory module"""
 
-import pytest
-
 from src.elements.base import BaseElement
 from src.elements.block import BlockElement
 from src.elements.element_factory import ElementFactory
@@ -122,7 +120,7 @@ class TestElementFactory:
         element_upper = ElementFactory.create_element(dom_upper)
         element_lower = ElementFactory.create_element(dom_lower)
 
-        assert type(element_upper) == type(element_lower)
+        assert type(element_upper) is type(element_lower)
         assert isinstance(element_upper, BlockElement)
 
     def test_create_element_with_empty_string(self) -> None:
@@ -176,7 +174,7 @@ class TestElementFactory:
         element2 = ElementFactory.create_element(dom_node2)
 
         # Should be same type but different instances
-        assert type(element1) == type(element2)
+        assert type(element1) is type(element2)
         assert element1 is not element2
 
     def test_factory_method_signature(self) -> None:

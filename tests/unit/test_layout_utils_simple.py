@@ -1,6 +1,5 @@
 """Simple working tests for layout utilities"""
 
-import pytest
 from PIL import ImageFont
 
 from src.layout_utils import LayoutUtils

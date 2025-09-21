@@ -2,13 +2,11 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from src.config import BrowserConfig
 from src.elements.heading import HeadingElement
 from src.html_parser import DOMNode
 from src.layout_engine import LayoutEngine
-from tests.fixtures.test_utils import MockFactory, TestDataBuilder
+from tests.fixtures.test_utils import MockFactory
 
 
 class TestHeadingElement:

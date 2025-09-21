@@ -2,7 +2,6 @@
 
 from unittest.mock import Mock
 
-import pytest
 from PIL import ImageFont
 
 from src.config import BrowserConfig
@@ -26,7 +25,10 @@ class TestLayoutUtils:
     def test_wrap_text_long_text(self) -> None:
         """Test text wrapping with text that needs multiple lines"""
         font = ImageFont.load_default()
-        text = "This is a very long line of text that should definitely wrap to multiple lines when rendered with a narrow width constraint"
+        text = (
+            "This is a very long line of text that should definitely "
+            "wrap to multiple lines when rendered with a narrow width"
+        )
         max_width = 100
 
         lines = LayoutUtils.wrap_text_with_font(text, font, max_width)

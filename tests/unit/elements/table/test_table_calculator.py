@@ -1,7 +1,5 @@
 """Tests for the table calculator module"""
 
-import pytest
-
 from src.config import BrowserConfig
 from src.elements.table.table_calculator import TableCalculator
 from src.html_parser import DOMNode
@@ -15,7 +13,7 @@ class TestTableCalculator:
         self.config = BrowserConfig()
 
     def create_table_with_rows(self, cell_data: list[list[str]]) -> DOMNode:
-        """Helper to create table DOM with rows"""
+        """Create table DOM with rows"""
         table_dom = DOMNode("table")
 
         for row_data in cell_data:

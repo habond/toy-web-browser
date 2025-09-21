@@ -1,7 +1,5 @@
 """Tests for the configuration module"""
 
-import pytest
-
 from src.config import BrowserConfig
 
 

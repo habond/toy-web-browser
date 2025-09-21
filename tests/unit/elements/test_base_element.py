@@ -14,11 +14,11 @@ class ConcreteElement(BaseElement):
     """Concrete implementation of BaseElement for testing"""
 
     def layout(self, layout_engine, x, viewport_width, **kwargs):
-        """Simple concrete implementation"""
+        """Implement concrete layout method"""
         return self._create_layout_node(x, 0, 100, 50)
 
     def render(self, draw, layout_node, renderer):
-        """Simple concrete implementation"""
+        """Implement concrete render method"""
         pass
 
 

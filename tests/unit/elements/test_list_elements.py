@@ -2,14 +2,11 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from src.config import BrowserConfig
-from src.elements.element_factory import ElementFactory
 from src.elements.list import ListElement, ListItemElement
 from src.html_parser import DOMNode
 from src.layout_engine import LayoutEngine
-from tests.fixtures.test_utils import MockFactory, TestDataBuilder
+from tests.fixtures.test_utils import TestDataBuilder
 
 
 class TestListElement:
@@ -80,7 +77,7 @@ class TestListElement:
         # Add multiple list items
         for i in range(3):
             li_dom = DOMNode("li")
-            text_dom = DOMNode("text", text=f"Item {i+1}")
+            text_dom = DOMNode("text", text=f"Item {i + 1}")
             li_dom.add_child(text_dom)
             ul_dom.add_child(li_dom)
 
@@ -197,7 +194,7 @@ class TestListElement:
 
         # Check that ordered=False was passed
         call_args = mock_list_item.layout.call_args
-        assert call_args[1]["ordered"] == False
+        assert call_args[1]["ordered"] is False
 
         # Test ordered list
         ol_dom = DOMNode("ol")
@@ -208,7 +205,7 @@ class TestListElement:
 
         # Check that ordered=True was passed
         call_args = mock_list_item.layout.call_args
-        assert call_args[1]["ordered"] == True
+        assert call_args[1]["ordered"] is True
 
     def test_list_element_render(self) -> None:
         """Test list element rendering"""

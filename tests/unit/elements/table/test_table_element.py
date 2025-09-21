@@ -2,8 +2,6 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from src.config import BrowserConfig
 from src.elements.table.table_element import TableElement
 from src.html_parser import DOMNode
@@ -20,7 +18,7 @@ class TestTableElement:
         self.layout_engine = LayoutEngine()
 
     def create_table_with_rows(self, cell_data: list[list[str]]) -> DOMNode:
-        """Helper to create table DOM with rows"""
+        """Create table DOM with rows"""
         table_dom = DOMNode("table")
 
         for row_data in cell_data:
@@ -67,7 +65,6 @@ class TestTableElement:
         table_dom = DOMNode("table")  # No rows
         element = TableElement(table_dom)
 
-        initial_y = self.layout_engine.current_y
         layout_node = element.layout(self.layout_engine, 10, 800)
 
         assert layout_node is not None

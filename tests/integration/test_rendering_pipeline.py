@@ -3,7 +3,6 @@
 import tempfile
 from pathlib import Path
 
-import pytest
 from PIL import Image
 
 from src.browser import render_html
@@ -108,7 +107,7 @@ class TestRenderingPipeline:
         <div>
             <h2>Section Title</h2>
             <div>
-                <p>Paragraph with <strong>bold text</strong> and <em>italic text</em>.</p>
+                <p>Paragraph with <strong>bold text</strong> and <em>italic</em>.</p>
                 <ul>
                     <li>Item with <a href="#">link</a></li>
                     <li>Another item</li>
@@ -270,7 +269,6 @@ class TestRenderingPipeline:
                     assert node.box.x + node.box.width >= parent_box.x
 
                 # Child nodes should be positioned after this node
-                current_y = node.box.y
                 for child in getattr(node, "children", []):
                     validate_coordinates(child, node.box)
 

@@ -1,8 +1,5 @@
 """Simple working tests for renderer module"""
 
-import pytest
-from PIL import Image
-
 from src.renderer import Renderer
 
 

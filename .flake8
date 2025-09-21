@@ -36,6 +36,8 @@ per-file-ignores =
     tests/*:D101,D102,D103,D105,D107
     # Allow long lines in test files
     tests/*:E501
+    # Ignore import ordering conflicts in fixtures __init__.py (isort handles this better)
+    tests/fixtures/__init__.py:I101
 max-complexity = 15
 import-order-style = google
-application-import-names = src
+application-import-names = src,tests

@@ -1,14 +1,11 @@
 """Tests for the InlineElement class"""
 
-from unittest.mock import Mock, patch
-
-import pytest
+from unittest.mock import Mock
 
 from src.config import BrowserConfig
 from src.elements.inline import InlineElement
 from src.html_parser import DOMNode
 from src.layout_engine import LayoutEngine, LayoutNode
-from tests.fixtures.test_utils import MockFactory, TestDataBuilder
 
 
 class TestInlineElement:

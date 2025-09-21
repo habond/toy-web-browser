@@ -1,13 +1,9 @@
 """Tests for the font manager module"""
 
 import tempfile
-from pathlib import Path
+from typing import Any
 from unittest.mock import patch
 
-import pytest
-from PIL import ImageFont
-
-from src.exceptions import FontError
 from src.font_manager import FontManager
 
 
@@ -99,7 +95,7 @@ class TestFontManager:
         assert font is not None
 
     @patch("pathlib.Path.exists")
-    def test_font_file_discovery(self, mock_exists: any) -> None:
+    def test_font_file_discovery(self, mock_exists: Any) -> None:
         """Test font file discovery logic"""
         mock_exists.return_value = True
 
@@ -112,9 +108,7 @@ class TestFontManager:
     def test_font_manager_with_missing_fonts_directory(self) -> None:
         """Test behavior when fonts directory doesn't exist"""
         # Create a temporary directory without fonts
-        with tempfile.TemporaryDirectory() as temp_dir:
-            temp_fonts_dir = Path(temp_dir) / "nonexistent_fonts"
-
+        with tempfile.TemporaryDirectory():
             # Should still work with default fonts
             font_manager = FontManager()
             font = font_manager.get_font()

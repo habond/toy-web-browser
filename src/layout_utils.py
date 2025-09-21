@@ -2,7 +2,7 @@
 Layout utility functions and mixins for the toy web browser
 """
 
-from typing import List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 from PIL import ImageFont
 
@@ -79,7 +79,7 @@ class LayoutUtils:
 
     @staticmethod
     def wrap_text_with_font(
-        text: str, font: Union[ImageFont.ImageFont, any], max_width: int
+        text: str, font: Union[ImageFont.ImageFont, Any], max_width: int
     ) -> List[str]:
         """Wrap text to fit within the specified width using font metrics"""
         if not text:
@@ -95,7 +95,7 @@ class LayoutUtils:
                 lines.append("")
                 continue
 
-            current_line = []
+            current_line: List[str] = []
             for word in words:
                 test_line = " ".join(current_line + [word])
                 try:
@@ -124,7 +124,7 @@ class LayoutUtils:
 
     @staticmethod
     def calculate_text_dimensions(
-        text: str, font: Union[ImageFont.ImageFont, any]
+        text: str, font: Union[ImageFont.ImageFont, Any]
     ) -> Tuple[int, int]:
         """Calculate text dimensions using font metrics"""
         if not text:
@@ -166,7 +166,7 @@ class LayoutUtils:
     @staticmethod
     def calculate_wrapped_text_height(
         text: str,
-        font: Union[ImageFont.ImageFont, any],
+        font: Union[ImageFont.ImageFont, Any],
         max_width: int,
         line_spacing: float,
     ) -> int:
@@ -215,7 +215,7 @@ class LayoutMixin:
         return viewport_width - 2 * x
 
     def calculate_content_height(
-        self, layout_node, width: int, config, font_manager
+        self, layout_node: Any, width: int, config: Any, font_manager: Any
     ) -> int:
         """Calculate content height for layout node"""
         dom_node = layout_node.dom_node

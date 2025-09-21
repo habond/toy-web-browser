@@ -2,12 +2,10 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-from PIL import Image, ImageDraw
+from PIL import Image
 
 from src.config import BrowserConfig
-from src.html_parser import DOMNode
-from src.layout_engine import Box, LayoutNode
+from src.layout_engine import Box
 from src.renderer import Renderer
 from tests.fixtures import TestDataBuilder
 
@@ -243,7 +241,6 @@ class TestRenderer:
     def test_render_preserves_image_references(self) -> None:
         """Test that custom images are not modified unexpectedly"""
         original_image = Image.new("RGB", (200, 200), "red")
-        original_pixel = original_image.getpixel((100, 100))
 
         layout_tree = TestDataBuilder.create_layout_node(
             TestDataBuilder.create_dom_node("root")

@@ -2,8 +2,6 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from src.config import BrowserConfig
 from src.elements.table.table_row_element import TableRowElement
 from src.html_parser import DOMNode
@@ -22,7 +20,7 @@ class TestTableRowElement:
     def create_row_with_cells(
         self, cell_data: list[str], cell_tag: str = "td"
     ) -> DOMNode:
-        """Helper to create table row DOM with cells"""
+        """Create table row DOM with cells"""
         tr_dom = DOMNode("tr")
 
         for cell_text in cell_data:

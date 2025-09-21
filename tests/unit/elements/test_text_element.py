@@ -2,12 +2,10 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from src.config import BrowserConfig
 from src.elements.text import TextElement
 from src.html_parser import DOMNode
-from src.layout_engine import Box, LayoutEngine
+from src.layout_engine import LayoutEngine
 from tests.fixtures.test_utils import MockFactory, TestDataBuilder
 
 
@@ -60,7 +58,10 @@ class TestTextElement:
 
     def test_text_element_layout_with_wrapping(self) -> None:
         """Test text element layout with text wrapping"""
-        long_text = "This is a very long line of text that should wrap when rendered with narrow width"
+        long_text = (
+            "This is a very long line of text that should wrap "
+            "when rendered with narrow width"
+        )
         dom_node = DOMNode("text", text=long_text)
         element = TextElement(dom_node)
 

@@ -1,14 +1,12 @@
 """Tests for the BlockElement class"""
 
-from unittest.mock import Mock, patch
-
-import pytest
+from unittest.mock import Mock
 
 from src.config import BrowserConfig
 from src.elements.block import BlockElement
 from src.html_parser import DOMNode
 from src.layout_engine import Box, LayoutEngine
-from tests.fixtures.test_utils import MockFactory, TestDataBuilder
+from tests.fixtures.test_utils import MockFactory
 
 
 class TestBlockElement:

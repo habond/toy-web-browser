@@ -2,13 +2,11 @@
 
 from unittest.mock import Mock
 
-import pytest
-
 from src.config import BrowserConfig
 from src.elements.special import BreakElement, HorizontalRuleElement
 from src.html_parser import DOMNode
 from src.layout_engine import Box, LayoutEngine
-from tests.fixtures.test_utils import MockFactory, TestDataBuilder
+from tests.fixtures.test_utils import TestDataBuilder
 
 
 class TestBreakElement:
