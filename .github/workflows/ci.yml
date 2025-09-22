@@ -285,10 +285,17 @@ jobs:
       run: |
         python -m pytest tests/test_browser.py tests/test_html_parser.py tests/test_layout_engine.py -v
 
-    - name: Test basic rendering
+    - name: Test basic rendering (Unix)
+      if: matrix.os != 'windows-latest'
       run: |
         python -m src.browser examples/test1.html output_test.png
         ls -la output_test.png  # Verify file was created
+
+    - name: Test basic rendering (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        python -m src.browser examples/test1.html output_test.png
+        Get-ChildItem output_test.png  # Verify file was created
 
     - name: Cross-platform script test (Unix)
       if: matrix.os != 'windows-latest'
