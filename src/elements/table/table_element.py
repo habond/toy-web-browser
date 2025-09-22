@@ -75,9 +75,13 @@ class TableElement(BaseElement):
         table_box = layout_node.box
 
         # Draw horizontal lines (top, between rows, bottom)
-        y_positions = [table_box.y]
-        for row in rows:
-            y_positions.append(row.box.y + row.box.height)
+        # Start from first row position, not table box top (which includes margin)
+        if rows:
+            y_positions = [rows[0].box.y]
+            for row in rows:
+                y_positions.append(row.box.y + row.box.height)
+        else:
+            y_positions = [table_box.y]
 
         for y in y_positions:
             draw.line(
