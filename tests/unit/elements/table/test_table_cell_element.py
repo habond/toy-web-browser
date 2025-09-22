@@ -286,10 +286,10 @@ class TestTableCellElement:
 
         element.render(mock_draw, layout_node, mock_renderer)
 
-        # Should draw background for th
+        # Should draw background for th (adjusted for 1px grid line spacing)
         mock_draw.rectangle.assert_called_once()
         call_args = mock_draw.rectangle.call_args
-        assert call_args[0][0] == (10, 20, 90, 50)  # x, y, x+w, y+h
+        assert call_args[0][0] == (11, 21, 89, 49)  # x+1, y+1, x+w-1, y+h-1
         assert call_args[1]["fill"] == "#f0f0f0"
 
         # Should have rendered child

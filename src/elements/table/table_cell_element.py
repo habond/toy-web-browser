@@ -65,12 +65,13 @@ class TableCellElement(BaseElement):
         """Render table cell with background for headers"""
         # Draw background for header cells
         if self.dom_node.tag == "th":
+            # Adjust rectangle to not cover grid lines (1px border)
             draw.rectangle(
                 (
-                    layout_node.box.x,
-                    layout_node.box.y,
-                    layout_node.box.x + layout_node.box.width,
-                    layout_node.box.y + layout_node.box.height,
+                    layout_node.box.x + 1,
+                    layout_node.box.y + 1,
+                    layout_node.box.x + layout_node.box.width - 1,
+                    layout_node.box.y + layout_node.box.height - 1,
                 ),
                 fill="#f0f0f0",
             )
