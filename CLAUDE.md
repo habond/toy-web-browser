@@ -26,6 +26,7 @@ pip install -r requirements.txt
 # Code quality checks
 ./scripts/format.sh    # Format with black + isort
 ./scripts/lint.sh      # Run flake8 + mypy + format checks
+./scripts/clean.sh     # Clean build artifacts and cache files
 
 # Testing (comprehensive test suite - 308 tests, 90% coverage)
 ./scripts/test.sh                    # Run all tests with dynamic discovery
@@ -51,6 +52,7 @@ mypy src/                    # Type checking only (uses pyproject.toml)
 black src/ tests/            # Code formatting
 flake8 src/ tests/           # Linting
 isort src/ tests/            # Import sorting
+./scripts/clean.sh           # Clean build artifacts and cache files
 pre-commit run --all-files   # Run all quality checks
 ```
 
@@ -158,30 +160,26 @@ Basic structure, headings (h1-h6), paragraphs, lists (ul/ol/li), tables (table/t
 
 ```
 src/
-├── browser.py                 # Main entry point
+├── browser.py                 # Main entry point and CLI
 ├── config.py                  # 🆕 Centralized configuration (BrowserConfig)
 ├── exceptions.py              # 🆕 Custom exception hierarchy
 ├── font_manager.py            # 🆕 Professional font management (FontManager)
 ├── layout_utils.py            # 🆕 Layout utilities (LayoutUtils, LayoutMixin)
-├── html_parser.py            # DOMNode, HTMLParser
-├── layout_engine.py          # LayoutEngine, LayoutNode, Box (refactored)
-├── renderer.py               # Renderer (refactored with FontManager)
+├── html_parser.py            # DOM tree creation (DOMNode, HTMLParser)
+├── layout_engine.py          # Layout computation (LayoutEngine, LayoutNode, Box)
+├── renderer.py               # PNG image generation (refactored with FontManager)
 └── elements/                  # Element-specific implementations
-    ├── __init__.py
-    ├── base.py               # BaseElement abstract class
-    ├── element_factory.py    # ElementFactory for creating elements
-    ├── text.py               # TextElement (enhanced with layout utils)
-    ├── block.py              # BlockElement (div, p, blockquote)
-    ├── heading.py            # HeadingElement (h1-h6, refactored)
-    ├── list.py               # ListElement, ListItemElement
-    ├── inline.py             # InlineElement (b, i, span, a, etc.)
-    ├── special.py            # BreakElement, HorizontalRuleElement
-    └── table/                 # 🆕 Modular table implementation
-        ├── __init__.py
-        ├── table_element.py      # Main table logic and grid rendering
+    ├── base.py               # BaseElement abstract class and ElementFactory
+    ├── text.py, block.py     # Text and block elements (div, p, blockquote)
+    ├── heading.py            # Heading elements (h1-h6, size multipliers)
+    ├── list.py               # List elements (ul, ol, li)
+    ├── inline.py             # Inline elements (b, i, span, a, code, etc.)
+    ├── special.py            # Special elements (br, hr)
+    └── table/                # 🆕 Modular table implementation
+        ├── table_element.py      # Main table coordination and grid rendering
         ├── table_row_element.py  # Row layout and cell management
         ├── table_cell_element.py # Cell rendering with header styling
-        └── table_calculator.py   # Column width calculations
+        └── table_calculator.py   # Column width and dimension calculations
 ```
 
 ## Testing Infrastructure (🆕 2024)
@@ -192,29 +190,14 @@ The project includes comprehensive testing infrastructure with **90% code covera
 ```
 tests/
 ├── unit/                    # Comprehensive unit tests for all modules
-│   ├── test_config.py          # Configuration testing
+│   ├── test_config.py          # Configuration system testing
 │   ├── test_font_manager.py    # Font management testing
 │   ├── test_layout_utils.py    # Layout utilities testing
 │   ├── test_renderer.py       # Renderer testing
-│   └── elements/            # Element-specific testing
-│       ├── test_base_element.py     # Abstract base element
-│       ├── test_block_element.py    # Block elements (div, p, blockquote)
-│       ├── test_element_factory.py  # Element factory patterns
-│       ├── test_heading_element.py  # Heading elements (h1-h6)
-│       ├── test_inline_element.py   # Inline elements (b, i, span, a)
-│       ├── test_list_elements.py    # List elements (ul, ol, li)
-│       ├── test_special_elements.py # Special elements (br, hr)
-│       ├── test_text_element.py     # Text rendering and wrapping
-│       └── table/               # Complete table module testing
-│           ├── test_table_calculator.py   # Column width calculations
-│           ├── test_table_cell_element.py # Cell rendering and styling
-│           ├── test_table_element.py      # Main table coordination
-│           └── test_table_row_element.py  # Row layout and management
+│   └── elements/            # Element-specific testing (factory, all HTML elements)
+│       └── table/               # Complete table module testing (4 test files)
 ├── integration/             # End-to-end pipeline tests
-│   └── test_rendering_pipeline.py
-├── fixtures/                # Professional test infrastructure
-│   ├── __init__.py
-│   └── test_utils.py       # TestDataBuilder, MockFactory, CustomAssertions
+├── fixtures/                # Professional test infrastructure (MockFactory, TestDataBuilder)
 ├── conftest.py             # Pytest configuration with shared fixtures
 ├── test_browser.py         # Original integration tests (maintained)
 ├── test_html_parser.py     # HTML parser tests
@@ -256,7 +239,7 @@ When making changes to this codebase, follow these principles established during
 4. **Handle Errors Properly**: Use custom exceptions from `exceptions.py` for specific error types
 5. **Maintain Modularity**: Keep table-related changes within the `elements/table/` module
 6. **Follow Type Safety**: Maintain proper type annotations, especially for Optional parameters
-7. **Preserve Test Coverage**: Ensure all changes maintain the existing test suite (70/70 tests, 77% coverage)
+7. **Preserve Test Coverage**: Ensure all changes maintain the existing test suite (308 tests, 90% coverage)
 
 ## Configuration Access Patterns
 

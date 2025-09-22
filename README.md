@@ -73,7 +73,6 @@ The `--output-dir` option allows you to specify a target directory for the outpu
 ```
 toy-web-browser/
 ├── src/                    # Source code
-│   ├── __init__.py
 │   ├── browser.py         # Main browser logic and CLI
 │   ├── config.py          # 🆕 Centralized configuration
 │   ├── exceptions.py      # 🆕 Custom exception hierarchy
@@ -81,74 +80,26 @@ toy-web-browser/
 │   ├── layout_utils.py    # 🆕 Layout utility functions
 │   ├── html_parser.py     # DOM tree creation
 │   ├── layout_engine.py   # Position and size calculation
-│   ├── renderer.py        # PNG image generation (refactored)
-│   └── elements/          # Element-specific implementations
-│       ├── __init__.py
-│       ├── base.py        # Abstract base element class
-│       ├── element_factory.py # Factory for creating elements
-│       ├── text.py        # Text rendering (enhanced)
-│       ├── block.py       # Block elements (div, p, blockquote)
-│       ├── heading.py     # Heading elements (h1-h6)
-│       ├── list.py        # List elements (ul, ol, li)
-│       ├── inline.py      # Inline elements (b, i, span, a, etc.)
-│       ├── special.py     # Special elements (br, hr)
-│       └── table/         # 🆕 Modular table implementation
-│           ├── __init__.py
-│           ├── table_element.py      # Main table logic
-│           ├── table_row_element.py  # Row handling
-│           ├── table_cell_element.py # Cell rendering
-│           └── table_calculator.py   # Width calculations
-├── tests/                 # Comprehensive test suite (90% coverage)
-│   ├── __init__.py
-│   ├── conftest.py        # Pytest fixtures and shared utilities
-│   ├── test_browser.py    # End-to-end integration tests
-│   ├── test_html_parser.py# HTML parsing tests
-│   ├── test_layout_engine.py # Layout computation tests
-│   ├── unit/              # Unit tests for all modules
-│   │   ├── test_config.py
-│   │   ├── test_font_manager.py
-│   │   ├── test_layout_utils.py
-│   │   ├── test_renderer.py
-│   │   └── elements/      # Element-specific tests
-│   │       ├── test_base_element.py
-│   │       ├── test_block_element.py
-│   │       ├── test_element_factory.py
-│   │       ├── test_heading_element.py
-│   │       ├── test_inline_element.py
-│   │       ├── test_list_elements.py
-│   │       ├── test_special_elements.py
-│   │       ├── test_text_element.py
-│   │       └── table/     # Table module tests
-│   │           ├── test_table_calculator.py
-│   │           ├── test_table_cell_element.py
-│   │           ├── test_table_element.py
-│   │           └── test_table_row_element.py
-│   └── fixtures/          # Test utilities and data builders
-│       ├── __init__.py
-│       └── test_utils.py  # MockFactory, TestDataBuilder, assertions
-├── scripts/               # Development scripts
-│   ├── format.sh          # Code formatting
-│   ├── lint.sh            # Linting checks
+│   ├── renderer.py        # PNG image generation
+│   └── elements/          # Element implementations (BaseElement, factories, table module)
+├── tests/                 # Comprehensive test suite (308 tests, 90% coverage)
+│   ├── unit/              # Unit tests for all modules and elements
+│   ├── integration/       # End-to-end pipeline tests
+│   ├── fixtures/          # Test utilities and mock factories
+│   └── conftest.py        # Shared pytest fixtures
+├── scripts/               # Development automation
 │   ├── render.sh          # Render HTML to PNG
 │   ├── examples.sh        # Render all examples
-│   └── test.sh            # 🆕 Dynamic test runner
-├── fonts/                 # Project fonts
-│   ├── OpenSans-Regular.ttf
-│   ├── OpenSans-Bold.ttf
-│   ├── SourceCodePro-Regular.ttf
-│   └── README.md
-├── examples/              # Example HTML files
-│   ├── test1.html         # Basic features demo
-│   ├── test2.html         # Text formatting
-│   ├── test3.html         # Complex nested elements
-│   ├── font_test.html     # Font rendering
-│   ├── list_test.html     # List examples
-│   └── table_test.html    # Table examples
-├── output_images/         # Generated PNG files
+│   ├── test.sh            # Dynamic test runner with coverage
+│   ├── format.sh          # Code formatting (black + isort)
+│   ├── lint.sh            # Quality checks (flake8 + mypy)
+│   └── clean.sh           # Clean build artifacts
+├── examples/              # Example HTML files (6 test cases)
+├── fonts/                 # Bundled fonts (Open Sans, Source Code Pro)
+├── output_images/         # Generated PNG output directory
+├── .github/workflows/     # CI/CD automation (test.yml, ci.yml)
 ├── requirements.txt       # Python dependencies
-├── pyproject.toml         # Tool configuration
-├── .flake8               # Linting configuration
-├── CLAUDE.md             # Claude Code instructions
+├── pyproject.toml         # Modern tool configuration
 └── README.md
 ```
 
@@ -315,6 +266,9 @@ python -m pytest tests/unit/test_renderer.py -v
 
 # Run linting (flake8 + mypy + import/formatting checks)
 ./scripts/lint.sh
+
+# Clean build artifacts and cache files
+./scripts/clean.sh
 
 # Type checking only
 mypy src/

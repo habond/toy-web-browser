@@ -80,18 +80,8 @@ class TableElement(BaseElement):
             y_positions = [rows[0].box.y]
             for row in rows:
                 y_positions.append(row.box.y + row.box.height)
-        else:
-            y_positions = [table_box.y]
 
-        for y in y_positions:
-            draw.line(
-                [table_box.x, y, table_box.x + table_box.width, y],
-                fill="black",
-                width=1,
-            )
-
-        # Draw vertical lines (left, between columns, right)
-        if rows:
+            # Get actual content boundaries
             first_row = rows[0]
             cells = [
                 child
@@ -99,16 +89,41 @@ class TableElement(BaseElement):
                 if child.dom_node.tag in ["td", "th"]
             ]
 
-            x_positions = [table_box.x]
-            for cell in cells:
-                x_positions.append(cell.box.x + cell.box.width)
+            if cells:
+                # Horizontal lines span from first cell left to last cell right
+                left_x = cells[0].box.x
+                right_x = cells[-1].box.x + cells[-1].box.width
 
-            for x_pos in x_positions:
-                draw.line(
-                    [x_pos, table_box.y, x_pos, table_box.y + table_box.height],
-                    fill="black",
-                    width=1,
-                )
+                for y in y_positions:
+                    draw.line(
+                        [left_x, y, right_x, y],
+                        fill="black",
+                        width=1,
+                    )
+
+                # Draw vertical lines (left, between columns, right)
+                x_positions = [cells[0].box.x]
+                for cell in cells:
+                    x_positions.append(cell.box.x + cell.box.width)
+
+                # Vertical lines span from first row top to last row bottom
+                top_y = rows[0].box.y
+                bottom_y = rows[-1].box.y + rows[-1].box.height
+
+                for x_pos in x_positions:
+                    draw.line(
+                        [x_pos, top_y, x_pos, bottom_y],
+                        fill="black",
+                        width=1,
+                    )
+            else:
+                # Fallback for rows with no cells - draw using table boundaries
+                for y in y_positions:
+                    draw.line(
+                        [table_box.x, y, table_box.x + table_box.width, y],
+                        fill="black",
+                        width=1,
+                    )
 
     def _layout_table_row(
         self,
