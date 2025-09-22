@@ -34,7 +34,11 @@ class TableCellElement(BaseElement):
         layout_node = self._create_layout_node(x, layout_engine.current_y, width, 0)
 
         start_y = layout_engine.current_y
-        layout_engine.current_y += config.PADDING
+        cell_content_y = start_y + config.PADDING
+
+        # Save the current Y position to restore later (for table row consistency)
+        saved_y = layout_engine.current_y
+        layout_engine.current_y = cell_content_y
 
         # Layout cell content with restricted width
         content_width = width - 2 * config.PADDING
@@ -46,8 +50,12 @@ class TableCellElement(BaseElement):
                 if child_layout:
                     layout_node.add_child(child_layout)
 
-        layout_engine.current_y += config.PADDING
-        layout_node.box.height = layout_engine.current_y - start_y
+        # Calculate cell height based on content
+        content_height = layout_engine.current_y - cell_content_y
+        layout_node.box.height = content_height + 2 * config.PADDING
+
+        # Restore the Y position so other cells in the same row start at the same Y
+        layout_engine.current_y = saved_y
 
         return layout_node
 

@@ -60,8 +60,8 @@ class TestTableCellElement:
         assert layout_node.box.y == initial_y
         assert layout_node.box.width == width
 
-        # Should have increased current_y (padding + content + padding)
-        assert self.layout_engine.current_y > initial_y
+        # Table cells should NOT advance current_y (that's the table row's job)
+        assert self.layout_engine.current_y == initial_y
 
     def test_table_cell_td_element(self) -> None:
         """Test table cell with td tag"""
@@ -95,7 +95,7 @@ class TestTableCellElement:
         # Should still have height from padding
         expected_height = 2 * self.config.PADDING
         assert layout_node.box.height == expected_height
-        assert self.layout_engine.current_y == initial_y + expected_height
+        assert self.layout_engine.current_y == initial_y
 
     def test_table_cell_with_empty_text(self) -> None:
         """Test table cell with empty text content"""
@@ -203,12 +203,12 @@ class TestTableCellElement:
         td_dom = self.create_cell_with_text("Content")
         element = TableCellElement(td_dom)
 
-        initial_y = self.layout_engine.current_y
         layout_node = element.layout_with_width(self.layout_engine, 10, 800, 100.0)
 
         assert layout_node is not None
-        # Height should be the difference in current_y
-        expected_height = self.layout_engine.current_y - initial_y
+        # Height should be content height plus padding
+        # Text content (font_size * line_height) + 2 * padding
+        expected_height = 16 * 1.5 + 2 * self.config.PADDING  # 24 + 10 = 34
         assert layout_node.box.height == expected_height
 
     def test_table_cell_content_width_calculation(self) -> None:
@@ -335,9 +335,10 @@ class TestTableCellElement:
         layout_node = element.layout_with_width(self.layout_engine, 10, 800, 100.0)
 
         assert layout_node is not None
-        # current_y should advance by at least 2 * padding
-        min_advance = 2 * self.config.PADDING
-        assert self.layout_engine.current_y >= initial_y + min_advance
+        # current_y should NOT advance (that's the table row's responsibility)
+        assert self.layout_engine.current_y == initial_y
+        # But cell height should include padding
+        assert layout_node.box.height >= 2 * self.config.PADDING
 
     def test_table_cell_layout_child_none_result(self) -> None:
         """Test table cell when layout_child_with_width returns None"""
