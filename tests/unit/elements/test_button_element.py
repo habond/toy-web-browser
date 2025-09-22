@@ -138,6 +138,7 @@ class TestButtonElement:
         element = ButtonElement(button_dom)
 
         layout_node = element.layout(self.layout_engine, 10, 800)
+        assert layout_node is not None
         layout_node.box = Box(10, 20, 80, 30)
 
         mock_renderer = Mock()
@@ -168,6 +169,7 @@ class TestButtonElement:
         element = ButtonElement(button_dom)
 
         layout_node = element.layout(self.layout_engine, 10, 800)
+        assert layout_node is not None
         layout_node.box = Box(50, 100, 100, 40)
 
         mock_renderer = Mock()
@@ -202,6 +204,7 @@ class TestButtonElement:
         element = ButtonElement(button_dom)
 
         layout_node = element.layout(self.layout_engine, 10, 800)
+        assert layout_node is not None
         layout_node.box = Box(0, 0, 100, 50)
 
         mock_renderer = Mock()

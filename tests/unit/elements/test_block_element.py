@@ -1,6 +1,6 @@
 """Tests for the BlockElement class"""
 
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from src.config import BrowserConfig
 from src.elements.block import BlockElement
@@ -65,17 +65,18 @@ class TestBlockElement:
 
         # Mock the layout child call
         mock_child_layout = Mock()
-        self.layout_engine._layout_child = Mock(return_value=mock_child_layout)
+        with patch.object(
+            self.layout_engine, "_layout_child", return_value=mock_child_layout
+        ) as mock_method:
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
+            assert layout_node is not None
+            assert len(layout_node.children) == 1
+            assert layout_node.children[0] == mock_child_layout
 
-        assert layout_node is not None
-        assert len(layout_node.children) == 1
-        assert layout_node.children[0] == mock_child_layout
-
-        # Should have called _layout_child with padding offset
-        expected_x = 10 + self.layout_engine.PADDING
-        self.layout_engine._layout_child.assert_called_with(text_dom, expected_x)
+            # Should have called _layout_child with padding offset
+            expected_x = 10 + self.layout_engine.PADDING
+            mock_method.assert_called_with(text_dom, expected_x)
 
     def test_block_element_multiple_children(self) -> None:
         """Test block element with multiple children"""
@@ -89,17 +90,18 @@ class TestBlockElement:
 
         mock_child1 = Mock()
         mock_child2 = Mock()
-        self.layout_engine._layout_child = Mock(side_effect=[mock_child1, mock_child2])
+        with patch.object(
+            self.layout_engine, "_layout_child", side_effect=[mock_child1, mock_child2]
+        ) as mock_method:
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
+            assert layout_node is not None
+            assert len(layout_node.children) == 2
+            assert layout_node.children[0] == mock_child1
+            assert layout_node.children[1] == mock_child2
 
-        assert layout_node is not None
-        assert len(layout_node.children) == 2
-        assert layout_node.children[0] == mock_child1
-        assert layout_node.children[1] == mock_child2
-
-        # Should have called _layout_child for each child
-        assert self.layout_engine._layout_child.call_count == 2
+            # Should have called _layout_child for each child
+            assert mock_method.call_count == 2
 
     def test_block_element_child_returns_none(self) -> None:
         """Test block element when child layout returns None"""
@@ -110,9 +112,8 @@ class TestBlockElement:
         element = BlockElement(div_dom)
 
         # Mock child layout returning None
-        self.layout_engine._layout_child = Mock(return_value=None)
-
-        layout_node = element.layout(self.layout_engine, 10, 800)
+        with patch.object(self.layout_engine, "_layout_child", return_value=None):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
         assert layout_node is not None
         assert len(layout_node.children) == 0  # None children should not be added
@@ -248,18 +249,22 @@ class TestBlockElement:
         element = BlockElement(div_dom)
 
         # Capture the x coordinate passed to _layout_child
-        def mock_layout_child(child, x):
-            mock_layout_child.called_with_x = x
+        captured_x = None
+
+        def mock_layout_child(child: object, x: float) -> Mock:
+            nonlocal captured_x
+            captured_x = x
             return Mock()
 
-        self.layout_engine._layout_child = mock_layout_child
+        with patch.object(
+            self.layout_engine, "_layout_child", side_effect=mock_layout_child
+        ):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
-
-        assert layout_node is not None
-        # Child should have been positioned with padding offset
-        expected_x = 10 + self.layout_engine.PADDING
-        assert mock_layout_child.called_with_x == expected_x
+            assert layout_node is not None
+            # Child should have been positioned with padding offset
+            expected_x = 10 + self.layout_engine.PADDING
+            assert captured_x == expected_x
 
     def test_block_element_viewport_width_calculation(self) -> None:
         """Test viewport width calculation for block elements"""

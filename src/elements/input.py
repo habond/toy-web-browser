@@ -71,9 +71,9 @@ class InputElement(BaseElement):
 
         # Store display text and input type for rendering as additional attributes
         # (similar to how other elements store additional layout data)
-        layout_node.display_text = display_text  # type: ignore
-        layout_node.input_type = input_type  # type: ignore
-        layout_node.is_placeholder = not bool(value)  # type: ignore
+        layout_node.display_text = display_text
+        layout_node.input_type = input_type
+        layout_node.is_placeholder = not bool(value)
 
         # Update current_y position for next element
         layout_engine.current_y += height + config.MARGIN

@@ -130,15 +130,16 @@ class TestTableRowElement:
         mock_cell2 = Mock()
         mock_cell2.box.height = 30
         mock_cell_layouts = [mock_cell1, mock_cell2]
-        element._layout_table_cell = Mock(side_effect=mock_cell_layouts)
+        with patch.object(
+            element, "_layout_table_cell", side_effect=mock_cell_layouts
+        ) as mock_method:
+            layout_node = element.layout_with_table_params(
+                self.layout_engine, 10, 800, 150.0, 4
+            )
 
-        layout_node = element.layout_with_table_params(
-            self.layout_engine, 10, 800, 150.0, 4
-        )
-
-        assert layout_node is not None
-        # Should only call _layout_table_cell for td and th elements
-        assert element._layout_table_cell.call_count == 2
+            assert layout_node is not None
+            # Should only call _layout_table_cell for td and th elements
+            assert mock_method.call_count == 2
 
     def test_table_row_respects_column_limit(self) -> None:
         """Test that table row respects num_cols limit"""
@@ -148,15 +149,16 @@ class TestTableRowElement:
         # Mock cell layout
         mock_cell = Mock()
         mock_cell.box.height = 30
-        element._layout_table_cell = Mock(return_value=mock_cell)
+        with patch.object(
+            element, "_layout_table_cell", return_value=mock_cell
+        ) as mock_method:
+            layout_node = element.layout_with_table_params(
+                self.layout_engine, 10, 800, 100.0, 2  # Only 2 columns
+            )
 
-        layout_node = element.layout_with_table_params(
-            self.layout_engine, 10, 800, 100.0, 2  # Only 2 columns
-        )
-
-        assert layout_node is not None
-        # Should only process first 2 cells
-        assert element._layout_table_cell.call_count == 2
+            assert layout_node is not None
+            # Should only process first 2 cells
+            assert mock_method.call_count == 2
 
     def test_table_row_height_calculation(self) -> None:
         """Test table row height calculation from cell heights"""
@@ -169,12 +171,13 @@ class TestTableRowElement:
         mock_cell2 = Mock()
         mock_cell2.box.height = 50  # Taller cell
 
-        element._layout_table_cell = Mock(side_effect=[mock_cell1, mock_cell2])
-
-        initial_y = self.layout_engine.current_y
-        layout_node = element.layout_with_table_params(
-            self.layout_engine, 10, 800, 150.0, 2
-        )
+        with patch.object(
+            element, "_layout_table_cell", side_effect=[mock_cell1, mock_cell2]
+        ):
+            initial_y = self.layout_engine.current_y
+            layout_node = element.layout_with_table_params(
+                self.layout_engine, 10, 800, 150.0, 2
+            )
 
         assert layout_node is not None
         # Row height should be max of cell heights
@@ -183,7 +186,7 @@ class TestTableRowElement:
         assert self.layout_engine.current_y == initial_y + 50
 
     @patch("src.elements.element_factory.ElementFactory.create_element")
-    def test_table_row_layout_cell_method(self, mock_create_element):
+    def test_table_row_layout_cell_method(self, mock_create_element: Mock) -> None:
         """Test the _layout_table_cell method"""
         from src.elements.table.table_cell_element import TableCellElement
 
@@ -205,7 +208,9 @@ class TestTableRowElement:
         )
 
     @patch("src.elements.element_factory.ElementFactory.create_element")
-    def test_table_row_layout_cell_method_none_element(self, mock_create_element):
+    def test_table_row_layout_cell_method_none_element(
+        self, mock_create_element: Mock
+    ) -> None:
         """Test _layout_table_cell when ElementFactory returns None"""
         tr_dom = DOMNode("tr")
         element = TableRowElement(tr_dom)
@@ -218,7 +223,9 @@ class TestTableRowElement:
         assert result is None
 
     @patch("src.elements.element_factory.ElementFactory.create_element")
-    def test_table_row_layout_cell_method_wrong_element_type(self, mock_create_element):
+    def test_table_row_layout_cell_method_wrong_element_type(
+        self, mock_create_element: Mock
+    ) -> None:
         """Test _layout_table_cell when element is not TableCellElement"""
         tr_dom = DOMNode("tr")
         element = TableRowElement(tr_dom)
@@ -276,15 +283,16 @@ class TestTableRowElement:
         # Mock cell layout
         mock_cell = Mock()
         mock_cell.box.height = 30
-        element._layout_table_cell = Mock(return_value=mock_cell)
+        with patch.object(
+            element, "_layout_table_cell", return_value=mock_cell
+        ) as mock_method:
+            layout_node = element.layout_with_table_params(
+                self.layout_engine, 10, 800, 150.0, 2
+            )
 
-        layout_node = element.layout_with_table_params(
-            self.layout_engine, 10, 800, 150.0, 2
-        )
-
-        assert layout_node is not None
-        # Should process th cells like td cells
-        assert element._layout_table_cell.call_count == 2
+            assert layout_node is not None
+            # Should process th cells like td cells
+            assert mock_method.call_count == 2
 
     def test_table_row_with_mixed_cell_types(self) -> None:
         """Test table row with mixed td and th cells"""
@@ -299,15 +307,16 @@ class TestTableRowElement:
         # Mock cell layout
         mock_cell = Mock()
         mock_cell.box.height = 30
-        element._layout_table_cell = Mock(return_value=mock_cell)
+        with patch.object(
+            element, "_layout_table_cell", return_value=mock_cell
+        ) as mock_method:
+            layout_node = element.layout_with_table_params(
+                self.layout_engine, 10, 800, 150.0, 2
+            )
 
-        layout_node = element.layout_with_table_params(
-            self.layout_engine, 10, 800, 150.0, 2
-        )
-
-        assert layout_node is not None
-        # Should process both th and td cells
-        assert element._layout_table_cell.call_count == 2
+            assert layout_node is not None
+            # Should process both th and td cells
+            assert mock_method.call_count == 2
 
     def test_table_row_width_calculation(self) -> None:
         """Test table row width calculation"""
@@ -346,26 +355,31 @@ class TestTableRowElement:
         element = TableRowElement(tr_dom)
 
         # Mock cell layouts to capture positions
-        captured_positions = []
+        captured_positions: list[float] = []
 
-        def mock_layout_cell(layout_engine, dom_node, x, viewport_width, width):
+        def mock_layout_cell(
+            layout_engine: object,
+            dom_node: object,
+            x: float,
+            viewport_width: int,
+            width: float,
+        ) -> Mock:
             captured_positions.append(x)
             mock_cell = Mock()
             mock_cell.box.height = 30
             return mock_cell
 
-        element._layout_table_cell = mock_layout_cell
+        with patch.object(element, "_layout_table_cell", side_effect=mock_layout_cell):
+            x = 20
+            col_width = 100.0
+            layout_node = element.layout_with_table_params(
+                self.layout_engine, x, 800, col_width, 3
+            )
 
-        x = 20
-        col_width = 100.0
-        layout_node = element.layout_with_table_params(
-            self.layout_engine, x, 800, col_width, 3
-        )
-
-        assert layout_node is not None
-        # Cells should be positioned at x, x+col_width, x+2*col_width
-        expected_positions = [20, 120, 220]
-        assert captured_positions == expected_positions
+            assert layout_node is not None
+            # Cells should be positioned at x, x+col_width, x+2*col_width
+            expected_positions = [20, 120, 220]
+            assert captured_positions == expected_positions
 
     def test_table_row_no_height_for_empty_row(self) -> None:
         """Test that empty row has no height"""
@@ -388,12 +402,11 @@ class TestTableRowElement:
         element = TableRowElement(tr_dom)
 
         # Mock the specific method
-        element.layout_with_table_params = Mock(return_value=Mock())
+        with patch.object(
+            element, "layout_with_table_params", return_value=Mock()
+        ) as mock_method:
+            result = element.layout(self.layout_engine, 10, 800)
 
-        result = element.layout(self.layout_engine, 10, 800)
-
-        assert result is not None
-        # Should have called layout_with_table_params with default parameters
-        element.layout_with_table_params.assert_called_once_with(
-            self.layout_engine, 10, 800, 0, 0
-        )
+            assert result is not None
+            # Should have called layout_with_table_params with default parameters
+            mock_method.assert_called_once_with(self.layout_engine, 10, 800, 0, 0)

@@ -70,6 +70,7 @@ class TestTextElement:
 
         assert layout_node is not None
         assert hasattr(layout_node, "lines")
+        assert layout_node.lines is not None
         assert len(layout_node.lines) > 1
 
     def test_text_element_layout_updates_current_y(self) -> None:
@@ -194,7 +195,9 @@ class TestTextElement:
 
     @patch("src.elements.text.LayoutUtils.wrap_text")
     @patch("src.elements.text.LayoutUtils.compute_text_height")
-    def test_text_element_uses_layout_utils(self, mock_compute_height, mock_wrap_text):
+    def test_text_element_uses_layout_utils(
+        self, mock_compute_height: Mock, mock_wrap_text: Mock
+    ) -> None:
         """Test that TextElement uses LayoutUtils methods"""
         mock_wrap_text.return_value = ["Test line"]
         mock_compute_height.return_value = 24

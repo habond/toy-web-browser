@@ -1,6 +1,6 @@
 """Tests for the InlineElement class"""
 
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from src.config import BrowserConfig
 from src.elements.inline import InlineElement
@@ -45,17 +45,18 @@ class TestInlineElement:
 
         # Mock child layout
         mock_child_layout = Mock()
-        self.layout_engine._layout_child = Mock(return_value=mock_child_layout)
+        with patch.object(
+            self.layout_engine, "_layout_child", return_value=mock_child_layout
+        ) as mock_layout_child:
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
+            assert layout_node is not None
+            assert layout_node.dom_node == b_dom
+            assert len(layout_node.children) == 1
+            assert layout_node.children[0] == mock_child_layout
 
-        assert layout_node is not None
-        assert layout_node.dom_node == b_dom
-        assert len(layout_node.children) == 1
-        assert layout_node.children[0] == mock_child_layout
-
-        # Should have called _layout_child
-        self.layout_engine._layout_child.assert_called_with(text_dom, 10)
+            # Should have called _layout_child
+            mock_layout_child.assert_called_with(text_dom, 10)
 
     def test_inline_element_no_children(self) -> None:
         """Test inline element with no children"""
@@ -76,12 +77,11 @@ class TestInlineElement:
         element = InlineElement(i_dom)
 
         # Mock child layout returning None
-        self.layout_engine._layout_child = Mock(return_value=None)
+        with patch.object(self.layout_engine, "_layout_child", return_value=None):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
-
-        # Should return None when no valid children
-        assert layout_node is None
+            # Should return None when no valid children
+            assert layout_node is None
 
     def test_inline_element_multiple_children(self) -> None:
         """Test inline element with multiple children"""
@@ -95,14 +95,15 @@ class TestInlineElement:
 
         mock_child1 = Mock()
         mock_child2 = Mock()
-        self.layout_engine._layout_child = Mock(side_effect=[mock_child1, mock_child2])
+        with patch.object(
+            self.layout_engine, "_layout_child", side_effect=[mock_child1, mock_child2]
+        ):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
-
-        assert layout_node is not None
-        assert len(layout_node.children) == 2
-        assert layout_node.children[0] == mock_child1
-        assert layout_node.children[1] == mock_child2
+            assert layout_node is not None
+            assert len(layout_node.children) == 2
+            assert layout_node.children[0] == mock_child1
+            assert layout_node.children[1] == mock_child2
 
     def test_inline_element_mixed_children(self) -> None:
         """Test inline element with mix of valid and None children"""
@@ -115,13 +116,14 @@ class TestInlineElement:
         element = InlineElement(span_dom)
 
         mock_child1 = Mock()
-        self.layout_engine._layout_child = Mock(side_effect=[mock_child1, None])
+        with patch.object(
+            self.layout_engine, "_layout_child", side_effect=[mock_child1, None]
+        ):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
-
-        assert layout_node is not None
-        assert len(layout_node.children) == 1  # Only valid child
-        assert layout_node.children[0] == mock_child1
+            assert layout_node is not None
+            assert len(layout_node.children) == 1  # Only valid child
+            assert layout_node.children[0] == mock_child1
 
     def test_inline_element_render_bold_text(self) -> None:
         """Test rendering bold inline element"""

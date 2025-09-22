@@ -85,15 +85,16 @@ class TestListElement:
 
         # Mock the list item layout
         mock_layouts = [Mock() for _ in range(3)]
-        element._layout_list_item = Mock(side_effect=mock_layouts)
+        with patch.object(
+            element, "_layout_list_item", side_effect=mock_layouts
+        ) as mock_method:
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
+            assert layout_node is not None
+            assert len(layout_node.children) == 3
 
-        assert layout_node is not None
-        assert len(layout_node.children) == 3
-
-        # Should have called _layout_list_item for each item
-        assert element._layout_list_item.call_count == 3
+            # Should have called _layout_list_item for each item
+            assert mock_method.call_count == 3
 
     def test_list_with_non_li_children(self) -> None:
         """Test list that contains non-li children (should be skipped)"""
@@ -108,15 +109,16 @@ class TestListElement:
 
         element = ListElement(ul_dom)
         mock_layout = Mock()
-        element._layout_list_item = Mock(return_value=mock_layout)
+        with patch.object(
+            element, "_layout_list_item", return_value=mock_layout
+        ) as mock_method:
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
+            assert layout_node is not None
+            assert len(layout_node.children) == 1  # Only the li should be processed
 
-        assert layout_node is not None
-        assert len(layout_node.children) == 1  # Only the li should be processed
-
-        # Should only call _layout_list_item once (for the li)
-        element._layout_list_item.assert_called_once()
+            # Should only call _layout_list_item once (for the li)
+            mock_method.assert_called_once()
 
     def test_list_margins(self) -> None:
         """Test that list elements add appropriate margins"""
@@ -140,23 +142,32 @@ class TestListElement:
         element = ListElement(ul_dom)
 
         # Mock _layout_list_item to capture the x coordinate
+        captured_x = None
+
         def mock_layout_list_item(
-            layout_engine, dom_node, x, viewport_width, index, ordered
-        ):
-            mock_layout_list_item.captured_x = x
+            layout_engine: object,
+            dom_node: object,
+            x: float,
+            viewport_width: int,
+            index: int,
+            ordered: bool,
+        ) -> Mock:
+            nonlocal captured_x
+            captured_x = x
             return Mock()
 
-        element._layout_list_item = mock_layout_list_item
+        with patch.object(
+            element, "_layout_list_item", side_effect=mock_layout_list_item
+        ):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
-
-        assert layout_node is not None
-        # List items should be indented by 25 pixels
-        expected_x = 10 + 25
-        assert mock_layout_list_item.captured_x == expected_x
+            assert layout_node is not None
+            # List items should be indented by 25 pixels
+            expected_x = 10 + 25
+            assert captured_x == expected_x
 
     @patch("src.elements.element_factory.ElementFactory.create_element")
-    def test_layout_list_item_method(self, mock_create_element):
+    def test_layout_list_item_method(self, mock_create_element: Mock) -> None:
         """Test the _layout_list_item method"""
         ul_dom = DOMNode("ul")
         element = ListElement(ul_dom)
@@ -180,7 +191,9 @@ class TestListElement:
         )
 
     @patch("src.elements.element_factory.ElementFactory.create_element")
-    def test_layout_list_item_ordered_vs_unordered(self, mock_create_element):
+    def test_layout_list_item_ordered_vs_unordered(
+        self, mock_create_element: Mock
+    ) -> None:
         """Test that ordered parameter is passed correctly"""
         # Test unordered list
         ul_dom = DOMNode("ul")
@@ -241,21 +254,27 @@ class TestListElement:
         element = ListElement(ol_dom)
 
         # Mock _layout_list_item to capture indices
-        captured_indices = []
+        captured_indices: list[int] = []
 
         def mock_layout_list_item(
-            layout_engine, dom_node, x, viewport_width, index, ordered
-        ):
+            layout_engine: object,
+            dom_node: object,
+            x: float,
+            viewport_width: int,
+            index: int,
+            ordered: bool,
+        ) -> Mock:
             captured_indices.append(index)
             return Mock()
 
-        element._layout_list_item = mock_layout_list_item
+        with patch.object(
+            element, "_layout_list_item", side_effect=mock_layout_list_item
+        ):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
-        layout_node = element.layout(self.layout_engine, 10, 800)
-
-        assert layout_node is not None
-        # Indices should be 1, 2, 3
-        assert captured_indices == [1, 2, 3]
+            assert layout_node is not None
+            # Indices should be 1, 2, 3
+            assert captured_indices == [1, 2, 3]
 
 
 class TestListItemElement:
@@ -346,18 +365,19 @@ class TestListItemElement:
 
         # Mock child layout
         mock_child_layout = Mock()
-        self.layout_engine._layout_child = Mock(return_value=mock_child_layout)
+        with patch.object(
+            self.layout_engine, "_layout_child", return_value=mock_child_layout
+        ) as mock_method:
+            layout_node = element.layout(
+                self.layout_engine, 35, 800, index=1, ordered=False
+            )
 
-        layout_node = element.layout(
-            self.layout_engine, 35, 800, index=1, ordered=False
-        )
+            assert layout_node is not None
+            assert len(layout_node.children) == 1
+            assert layout_node.children[0] == mock_child_layout
 
-        assert layout_node is not None
-        assert len(layout_node.children) == 1
-        assert layout_node.children[0] == mock_child_layout
-
-        # Should have called _layout_child with correct x position
-        self.layout_engine._layout_child.assert_called_with(text_dom, 35)
+            # Should have called _layout_child with correct x position
+            mock_method.assert_called_with(text_dom, 35)
 
     def test_list_item_margin_after(self) -> None:
         """Test that list item adds margin after content"""
@@ -454,17 +474,18 @@ class TestListItemElement:
 
         mock_child1 = Mock()
         mock_child2 = Mock()
-        self.layout_engine._layout_child = Mock(side_effect=[mock_child1, mock_child2])
+        with patch.object(
+            self.layout_engine, "_layout_child", side_effect=[mock_child1, mock_child2]
+        ) as mock_method:
+            layout_node = element.layout(
+                self.layout_engine, 35, 800, index=1, ordered=False
+            )
 
-        layout_node = element.layout(
-            self.layout_engine, 35, 800, index=1, ordered=False
-        )
+            assert layout_node is not None
+            assert len(layout_node.children) == 2
 
-        assert layout_node is not None
-        assert len(layout_node.children) == 2
-
-        # Should have called _layout_child for each
-        assert self.layout_engine._layout_child.call_count == 2
+            # Should have called _layout_child for each
+            assert mock_method.call_count == 2
 
     def test_list_item_height_calculation(self) -> None:
         """Test list item height calculation"""

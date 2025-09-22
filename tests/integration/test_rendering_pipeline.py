@@ -2,6 +2,7 @@
 
 import tempfile
 from pathlib import Path
+from typing import Any
 
 from PIL import Image
 
@@ -233,7 +234,7 @@ class TestRenderingPipeline:
         layout_tree = self.layout_engine.compute_layout(dom_tree)
 
         # Verify that layout computed text dimensions
-        def check_layout_dimensions(node):
+        def check_layout_dimensions(node: Any) -> None:
             if hasattr(node, "box") and node.box.height > 0:
                 assert node.box.width >= 0
                 assert node.box.height >= 0
@@ -259,7 +260,7 @@ class TestRenderingPipeline:
         layout_tree = self.layout_engine.compute_layout(dom_tree)
 
         # Check that coordinates make sense
-        def validate_coordinates(node, parent_box=None):
+        def validate_coordinates(node: Any, parent_box: Any = None) -> None:
             if hasattr(node, "box"):
                 # Node should be within parent bounds (if parent exists)
                 if parent_box:

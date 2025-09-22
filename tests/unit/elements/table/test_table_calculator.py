@@ -97,7 +97,7 @@ class TestTableCalculator:
 
     def test_calculate_column_widths_empty_rows(self) -> None:
         """Test calculation with empty rows list"""
-        rows = []
+        rows: list[DOMNode] = []
 
         col_width, num_cols = TableCalculator.calculate_column_widths(rows, 800, 10)
 

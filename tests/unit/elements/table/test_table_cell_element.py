@@ -1,6 +1,6 @@
 """Tests for the TableCellElement class"""
 
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from src.config import BrowserConfig
 from src.elements.table.table_cell_element import TableCellElement
@@ -132,21 +132,22 @@ class TestTableCellElement:
 
         # Mock the layout engine method
         mock_child_layout = Mock()
-        self.layout_engine._layout_child_with_width = Mock(
-            return_value=mock_child_layout
-        )
+        with patch.object(
+            self.layout_engine,
+            "_layout_child_with_width",
+            return_value=mock_child_layout,
+        ) as mock_method:
+            layout_node = element.layout_with_width(self.layout_engine, 10, 800, 120.0)
 
-        layout_node = element.layout_with_width(self.layout_engine, 10, 800, 120.0)
+            assert layout_node is not None
+            assert len(layout_node.children) == 1
+            assert layout_node.children[0] == mock_child_layout
 
-        assert layout_node is not None
-        assert len(layout_node.children) == 1
-        assert layout_node.children[0] == mock_child_layout
-
-        # Should have called layout with correct parameters
-        self.layout_engine._layout_child_with_width.assert_called_once()
-        call_args = self.layout_engine._layout_child_with_width.call_args
-        assert call_args[0][1] == 10 + self.config.PADDING  # x + padding
-        assert call_args[0][2] == 120.0 - 2 * self.config.PADDING  # content_width
+            # Should have called layout with correct parameters
+            mock_method.assert_called_once()
+            call_args = mock_method.call_args
+            assert call_args[0][1] == 10 + self.config.PADDING  # x + padding
+            assert call_args[0][2] == 120.0 - 2 * self.config.PADDING  # content_width
 
     def test_table_cell_multiple_children(self) -> None:
         """Test table cell with multiple child elements"""
@@ -161,16 +162,17 @@ class TestTableCellElement:
         # Mock the layout engine method
         mock_child1 = Mock()
         mock_child2 = Mock()
-        self.layout_engine._layout_child_with_width = Mock(
-            side_effect=[mock_child1, mock_child2]
-        )
+        with patch.object(
+            self.layout_engine,
+            "_layout_child_with_width",
+            side_effect=[mock_child1, mock_child2],
+        ) as mock_method:
+            layout_node = element.layout_with_width(self.layout_engine, 10, 800, 100.0)
 
-        layout_node = element.layout_with_width(self.layout_engine, 10, 800, 100.0)
-
-        assert layout_node is not None
-        assert len(layout_node.children) == 2
-        # Should have called layout for each child
-        assert self.layout_engine._layout_child_with_width.call_count == 2
+            assert layout_node is not None
+            assert len(layout_node.children) == 2
+            # Should have called layout for each child
+            assert mock_method.call_count == 2
 
     def test_table_cell_mixed_children(self) -> None:
         """Test table cell with mixed child types"""
@@ -187,16 +189,17 @@ class TestTableCellElement:
         # Mock the layout engine method
         mock_text_layout = Mock()
         mock_span_layout = Mock()
-        self.layout_engine._layout_child_with_width = Mock(
-            side_effect=[mock_text_layout, mock_span_layout]
-        )
+        with patch.object(
+            self.layout_engine,
+            "_layout_child_with_width",
+            side_effect=[mock_text_layout, mock_span_layout],
+        ) as mock_method:
+            layout_node = element.layout_with_width(self.layout_engine, 10, 800, 100.0)
 
-        layout_node = element.layout_with_width(self.layout_engine, 10, 800, 100.0)
-
-        assert layout_node is not None
-        # Should layout text and span, but skip empty text
-        assert len(layout_node.children) == 2
-        assert self.layout_engine._layout_child_with_width.call_count == 2
+            assert layout_node is not None
+            # Should layout text and span, but skip empty text
+            assert len(layout_node.children) == 2
+            assert mock_method.call_count == 2
 
     def test_table_cell_height_calculation(self) -> None:
         """Test table cell height calculation"""
@@ -217,16 +220,19 @@ class TestTableCellElement:
         element = TableCellElement(td_dom)
 
         # Mock to capture content width
-        self.layout_engine._layout_child_with_width = Mock(return_value=Mock())
+        with patch.object(
+            self.layout_engine, "_layout_child_with_width", return_value=Mock()
+        ) as mock_method:
+            cell_width = 120.0
+            layout_node = element.layout_with_width(
+                self.layout_engine, 10, 800, cell_width
+            )
 
-        cell_width = 120.0
-        layout_node = element.layout_with_width(self.layout_engine, 10, 800, cell_width)
-
-        assert layout_node is not None
-        # Content width should be cell width minus 2 * padding
-        expected_content_width = cell_width - 2 * self.config.PADDING
-        call_args = self.layout_engine._layout_child_with_width.call_args
-        assert call_args[0][2] == expected_content_width
+            assert layout_node is not None
+            # Content width should be cell width minus 2 * padding
+            expected_content_width = cell_width - 2 * self.config.PADDING
+            call_args = mock_method.call_args
+            assert call_args[0][2] == expected_content_width
 
     def test_table_cell_position_calculation(self) -> None:
         """Test table cell position calculation"""
@@ -316,15 +322,14 @@ class TestTableCellElement:
         element = TableCellElement(td_dom)
 
         # Mock the specific method
-        element.layout_with_width = Mock(return_value=Mock())
+        with patch.object(
+            element, "layout_with_width", return_value=Mock()
+        ) as mock_method:
+            result = element.layout(self.layout_engine, 10, 800)
 
-        result = element.layout(self.layout_engine, 10, 800)
-
-        assert result is not None
-        # Should have called layout_with_width with default width
-        element.layout_with_width.assert_called_once_with(
-            self.layout_engine, 10, 800, 0
-        )
+            assert result is not None
+            # Should have called layout_with_width with default width
+            mock_method.assert_called_once_with(self.layout_engine, 10, 800, 0)
 
     def test_table_cell_padding_application(self) -> None:
         """Test that cell applies padding correctly"""
@@ -346,9 +351,10 @@ class TestTableCellElement:
         element = TableCellElement(td_dom)
 
         # Mock to return None (child layout failed)
-        self.layout_engine._layout_child_with_width = Mock(return_value=None)
-
-        layout_node = element.layout_with_width(self.layout_engine, 10, 800, 100.0)
+        with patch.object(
+            self.layout_engine, "_layout_child_with_width", return_value=None
+        ):
+            layout_node = element.layout_with_width(self.layout_engine, 10, 800, 100.0)
 
         assert layout_node is not None
         # Should not add None children
@@ -370,19 +376,20 @@ class TestTableCellElement:
         element = TableCellElement(td_dom)
 
         # Mock to capture content width
-        self.layout_engine._layout_child_with_width = Mock(return_value=Mock())
+        with patch.object(
+            self.layout_engine, "_layout_child_with_width", return_value=Mock()
+        ) as mock_method:
+            # Small width that's less than 2 * padding
+            small_width = self.config.PADDING * 1.5
+            layout_node = element.layout_with_width(
+                self.layout_engine, 10, 800, small_width
+            )
 
-        # Small width that's less than 2 * padding
-        small_width = self.config.PADDING * 1.5
-        layout_node = element.layout_with_width(
-            self.layout_engine, 10, 800, small_width
-        )
-
-        assert layout_node is not None
-        # Content width should be negative but handled gracefully
-        call_args = self.layout_engine._layout_child_with_width.call_args
-        content_width = call_args[0][2]
-        assert content_width < 0  # Should be negative
+            assert layout_node is not None
+            # Content width should be negative but handled gracefully
+            call_args = mock_method.call_args
+            content_width = call_args[0][2]
+            assert content_width < 0  # Should be negative
 
     def test_table_cell_different_positions(self) -> None:
         """Test table cell at different positions"""

@@ -87,7 +87,9 @@ class TestTableElement:
     @patch(
         "src.elements.table.table_calculator.TableCalculator.calculate_column_widths"
     )
-    def test_table_uses_calculator(self, mock_calc_widths, mock_get_rows):
+    def test_table_uses_calculator(
+        self, mock_calc_widths: Mock, mock_get_rows: Mock
+    ) -> None:
         """Test that table layout uses TableCalculator"""
         # Mock the calculator responses
         mock_rows = [Mock(), Mock()]
@@ -108,7 +110,9 @@ class TestTableElement:
     @patch(
         "src.elements.table.table_calculator.TableCalculator.calculate_column_widths"
     )
-    def test_table_with_no_columns(self, mock_calc_widths, mock_get_rows):
+    def test_table_with_no_columns(
+        self, mock_calc_widths: Mock, mock_get_rows: Mock
+    ) -> None:
         """Test table when calculator returns no columns"""
         mock_get_rows.return_value = [Mock()]
         mock_calc_widths.return_value = (0.0, 0)  # No columns
@@ -122,7 +126,7 @@ class TestTableElement:
         assert len(layout_node.children) == 0  # No rows should be added
 
     @patch("src.elements.element_factory.ElementFactory.create_element")
-    def test_table_layout_row_method(self, mock_create_element):
+    def test_table_layout_row_method(self, mock_create_element: Mock) -> None:
         """Test the _layout_table_row method"""
         from src.elements.table.table_row_element import TableRowElement
 
@@ -146,7 +150,9 @@ class TestTableElement:
         )
 
     @patch("src.elements.element_factory.ElementFactory.create_element")
-    def test_table_layout_row_method_none_element(self, mock_create_element):
+    def test_table_layout_row_method_none_element(
+        self, mock_create_element: Mock
+    ) -> None:
         """Test _layout_table_row when ElementFactory returns None"""
         table_dom = DOMNode("table")
         element = TableElement(table_dom)
@@ -161,7 +167,9 @@ class TestTableElement:
         assert result is None
 
     @patch("src.elements.element_factory.ElementFactory.create_element")
-    def test_table_layout_row_method_wrong_element_type(self, mock_create_element):
+    def test_table_layout_row_method_wrong_element_type(
+        self, mock_create_element: Mock
+    ) -> None:
         """Test _layout_table_row when element is not TableRowElement"""
         table_dom = DOMNode("table")
         element = TableElement(table_dom)
@@ -338,7 +346,7 @@ class TestTableElement:
         assert layout_node.box.y == initial_y
 
     @patch("src.elements.table.table_calculator.TableCalculator.get_table_rows")
-    def test_table_with_mixed_row_children(self, mock_get_rows):
+    def test_table_with_mixed_row_children(self, mock_get_rows: Mock) -> None:
         """Test table with non-row children mixed in"""
         # TableCalculator.get_table_rows should filter out non-row children
         mock_get_rows.return_value = []  # No valid rows found

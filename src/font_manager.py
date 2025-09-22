@@ -119,9 +119,10 @@ class FontManager:
         except AttributeError:
             try:
                 # Fall back to the older textsize method for older PIL versions
-                # pylint: disable=no-member
-                if hasattr(font, "getsize"):
-                    size = font.getsize(text)
+                # Use getattr to safely access the potentially missing method
+                getsize_method = getattr(font, "getsize", None)
+                if getsize_method is not None:
+                    size = getsize_method(text)
                     return (int(size[0]), int(size[1]))
                 else:
                     raise AttributeError("getsize method not available")

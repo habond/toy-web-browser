@@ -1,23 +1,30 @@
 """Tests for the BaseElement abstract class"""
 
+from typing import Any, Optional
 from unittest.mock import Mock
 
 import pytest
+from PIL import ImageDraw
 
 from src.elements.base import BaseElement
 from src.html_parser import DOMNode
 from src.layout_engine import Box, LayoutEngine, LayoutNode
+from src.renderer import Renderer
 from tests.fixtures.test_utils import TestDataBuilder
 
 
 class ConcreteElement(BaseElement):
     """Concrete implementation of BaseElement for testing"""
 
-    def layout(self, layout_engine, x, viewport_width, **kwargs):
+    def layout(
+        self, layout_engine: LayoutEngine, x: float, viewport_width: int, **kwargs: Any
+    ) -> Optional[LayoutNode]:
         """Implement concrete layout method"""
         return self._create_layout_node(x, 0, 100, 50)
 
-    def render(self, draw, layout_node, renderer):
+    def render(
+        self, draw: ImageDraw.ImageDraw, layout_node: LayoutNode, renderer: Renderer
+    ) -> None:
         """Implement concrete render method"""
         pass
 
@@ -30,7 +37,7 @@ class TestBaseElement:
         dom_node = DOMNode("div")
 
         with pytest.raises(TypeError):
-            BaseElement(dom_node)
+            BaseElement(dom_node)  # type: ignore[abstract]
 
     def test_base_element_concrete_implementation(self) -> None:
         """Test that concrete implementation can be created"""

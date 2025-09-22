@@ -302,7 +302,7 @@ class TestElementFactory:
 
         # Test with unusual but valid DOM node tags
         edge_cases = [
-            DOMNode(None),  # None tag
+            DOMNode("unknown"),  # Unknown tag
             DOMNode(""),  # Empty tag
         ]
 

@@ -173,6 +173,7 @@ class TestPreElement:
         element = PreElement(pre_dom)
 
         layout_node = element.layout(self.layout_engine, 10, 800)
+        assert layout_node is not None
         layout_node.box = Box(10, 20, 400, 100)
 
         mock_renderer = Mock()
@@ -203,6 +204,7 @@ class TestPreElement:
         element = PreElement(pre_dom)
 
         layout_node = element.layout(self.layout_engine, 10, 800)
+        assert layout_node is not None
         layout_node.box = Box(50, 100, 400, 200)
 
         mock_renderer = Mock()
@@ -242,6 +244,7 @@ class TestPreElement:
         element = PreElement(pre_dom)
 
         layout_node = element.layout(self.layout_engine, 10, 800)
+        assert layout_node is not None
         layout_node.box = Box(50, 100, 400, 200)
 
         mock_renderer = Mock()
@@ -309,6 +312,7 @@ class TestPreElement:
         element = PreElement(pre_dom)
 
         layout_node = element.layout(self.layout_engine, 10, 800)
+        assert layout_node is not None
 
         mock_renderer = Mock()
         mock_renderer._get_font.return_value = Mock()

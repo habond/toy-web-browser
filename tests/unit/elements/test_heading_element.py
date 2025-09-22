@@ -129,7 +129,7 @@ class TestHeadingElement:
         assert self.layout_engine.current_y >= initial_y + expected_margin_total
 
     @patch("src.elements.heading.config")
-    def test_heading_element_uses_config_sizes(self, mock_config):
+    def test_heading_element_uses_config_sizes(self, mock_config: Mock) -> None:
         """Test that heading element uses configuration for sizes"""
         mock_config.HEADING_SIZES = {"h1": 2.5, "h2": 2.0}
         mock_config.DEFAULT_FONT_SIZE = 16
@@ -146,9 +146,10 @@ class TestHeadingElement:
         mock_text_layout = Mock()
         mock_text_layout.box = Mock()
         mock_text_layout.box.y = 0
-        self.layout_engine._layout_child = Mock(return_value=mock_text_layout)
-
-        layout_node = element.layout(self.layout_engine, 10, 800)
+        with patch.object(
+            self.layout_engine, "_layout_child", return_value=mock_text_layout
+        ):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
         assert layout_node is not None
         # Check that font_size was set on the text layout
@@ -291,9 +292,10 @@ class TestHeadingElement:
         mock_text_layout = Mock()
         mock_text_layout.box = Mock()
         mock_text_layout.box.y = 0
-        self.layout_engine._layout_child = Mock(return_value=mock_text_layout)
-
-        layout_node = element.layout(self.layout_engine, 10, 800)
+        with patch.object(
+            self.layout_engine, "_layout_child", return_value=mock_text_layout
+        ):
+            layout_node = element.layout(self.layout_engine, 10, 800)
 
         assert layout_node is not None
         # Verify height was set based on font size and line height

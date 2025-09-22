@@ -34,6 +34,10 @@ class LayoutNode:
         self.marker_pos: Optional[Tuple[float, float]] = None
         self.button_text: Optional[str] = None
         self.button_padding: Optional[float] = None
+        # Input element specific attributes
+        self.display_text: Optional[str] = None
+        self.input_type: Optional[str] = None
+        self.is_placeholder: Optional[bool] = None
 
     def add_child(self, child: "LayoutNode") -> None:
         self.children.append(child)

@@ -1,7 +1,5 @@
 """Simple working tests for layout utilities"""
 
-from PIL import ImageFont
-
 from src.layout_utils import LayoutUtils
 
 
@@ -14,46 +12,32 @@ class TestLayoutUtilsSimple:
 
     def test_wrap_text_basic(self) -> None:
         """Test basic text wrapping functionality"""
-        font = ImageFont.load_default()
         text = "Hello world"
-        max_width = 1000  # Wide enough to fit
+        max_width = 1000.0  # Wide enough to fit
 
-        try:
-            lines = LayoutUtils.wrap_text(text, font, max_width)
-            assert isinstance(lines, list)
-            assert len(lines) >= 1
-        except Exception:
-            # If method doesn't exist or has different signature, that's OK
-            pass
+        lines = LayoutUtils.wrap_text(text, max_width)
+        assert isinstance(lines, list)
+        assert len(lines) >= 1
 
     def test_calculate_content_dimensions_basic(self) -> None:
         """Test basic content dimension calculation"""
-        font = ImageFont.load_default()
-        text = "Test"
+        lines = ["Test line 1", "Test line 2"]
+        font_size = 16.0
 
-        try:
-            width, height = LayoutUtils.calculate_content_dimensions(text, font)
-            assert isinstance(width, (int, float))
-            assert isinstance(height, (int, float))
-            assert width >= 0
-            assert height >= 0
-        except Exception:
-            # If method doesn't exist or has different signature, that's OK
-            pass
+        width, height = LayoutUtils.calculate_content_dimensions(lines, font_size)
+        assert isinstance(width, (int, float))
+        assert isinstance(height, (int, float))
+        assert width >= 0
+        assert height >= 0
 
     def test_compute_text_height_basic(self) -> None:
         """Test basic text height computation"""
-        font = ImageFont.load_default()
-        text = "Test"
-        width = 200
+        lines = ["Line 1", "Line 2", "Line 3"]
+        font_size = 16.0
 
-        try:
-            height = LayoutUtils.compute_text_height(text, font, width)
-            assert isinstance(height, (int, float))
-            assert height >= 0
-        except Exception:
-            # If method doesn't exist or has different signature, that's OK
-            pass
+        height = LayoutUtils.compute_text_height(lines, font_size)
+        assert isinstance(height, (int, float))
+        assert height >= 0
 
     def test_layout_utils_methods_exist(self) -> None:
         """Test that expected methods exist on LayoutUtils"""
