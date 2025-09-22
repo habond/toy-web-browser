@@ -24,10 +24,10 @@ class TestBrowser(unittest.TestCase):
         """Clean up test fixtures"""
         shutil.rmtree(self.test_dir)
 
-    def test_render_test1_html(self) -> None:
-        """Test rendering the first example HTML file"""
-        input_file = self.examples_dir / "test1.html"
-        output_file = self.output_dir / "test1_output.png"
+    def test_render_basic_structure_html(self) -> None:
+        """Test rendering the basic structure example HTML file"""
+        input_file = self.examples_dir / "01_basic_structure.html"
+        output_file = self.output_dir / "basic_structure_output.png"
 
         # Render the HTML
         render_html(input_file, output_file)
@@ -43,10 +43,10 @@ class TestBrowser(unittest.TestCase):
                 img.size[1], 600, "Image height should be at least 600px"
             )
 
-    def test_render_test2_html(self) -> None:
-        """Test rendering the second example HTML file"""
-        input_file = self.examples_dir / "test2.html"
-        output_file = self.output_dir / "test2_output.png"
+    def test_render_text_formatting_html(self) -> None:
+        """Test rendering the text formatting example HTML file"""
+        input_file = self.examples_dir / "02_text_formatting.html"
+        output_file = self.output_dir / "text_formatting_output.png"
 
         # Render the HTML
         render_html(input_file, output_file)
@@ -62,10 +62,10 @@ class TestBrowser(unittest.TestCase):
                 img.size[1], 600, "Image height should be at least 600px"
             )
 
-    def test_render_test3_html(self) -> None:
-        """Test rendering the third example HTML file"""
-        input_file = self.examples_dir / "test3.html"
-        output_file = self.output_dir / "test3_output.png"
+    def test_render_complex_nesting_html(self) -> None:
+        """Test rendering the complex nesting example HTML file"""
+        input_file = self.examples_dir / "06_complex_nesting.html"
+        output_file = self.output_dir / "complex_nesting_output.png"
 
         # Render the HTML
         render_html(input_file, output_file)
@@ -91,7 +91,7 @@ class TestBrowser(unittest.TestCase):
 
     def test_output_directory_creation(self) -> None:
         """Test that output directories are created automatically"""
-        input_file = self.examples_dir / "test1.html"
+        input_file = self.examples_dir / "01_basic_structure.html"
         output_file = self.test_dir / "nested" / "deep" / "directories" / "output.png"
 
         # Render the HTML

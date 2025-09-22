@@ -2,10 +2,12 @@
 
 from src.elements.base import BaseElement
 from src.elements.block import BlockElement
+from src.elements.button import ButtonElement
 from src.elements.element_factory import ElementFactory
 from src.elements.heading import HeadingElement
 from src.elements.inline import InlineElement
 from src.elements.list import ListElement, ListItemElement
+from src.elements.pre import PreElement
 from src.elements.special import BreakElement, HorizontalRuleElement
 from src.elements.table.table_cell_element import TableCellElement
 from src.elements.table.table_element import TableElement
@@ -42,6 +44,22 @@ class TestElementFactory:
             dom_node = DOMNode(tag)
             element = ElementFactory.create_element(dom_node)
             assert isinstance(element, BlockElement)
+
+    def test_create_pre_element(self) -> None:
+        """Test creating pre element"""
+        from src.html_parser import DOMNode
+
+        dom_node = DOMNode("pre")
+        element = ElementFactory.create_element(dom_node)
+        assert isinstance(element, PreElement)
+
+    def test_create_button_element(self) -> None:
+        """Test creating button element"""
+        from src.html_parser import DOMNode
+
+        dom_node = DOMNode("button")
+        element = ElementFactory.create_element(dom_node)
+        assert isinstance(element, ButtonElement)
 
     def test_create_inline_elements(self) -> None:
         """Test creating inline elements"""
@@ -206,6 +224,10 @@ class TestElementFactory:
             "div": BlockElement,
             "p": BlockElement,
             "blockquote": BlockElement,
+            # Preformatted elements
+            "pre": PreElement,
+            # Button elements
+            "button": ButtonElement,
             # Inline elements
             "span": InlineElement,
             "a": InlineElement,

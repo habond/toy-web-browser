@@ -18,7 +18,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Render HTML to PNG
-./scripts/render.sh examples/test1.html output.png --output-dir output_images
+./scripts/render.sh examples/01_basic_structure.html output.png --output-dir output_images
 
 # Render all examples at once
 ./scripts/examples.sh
@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ./scripts/lint.sh      # Run flake8 + mypy + format checks
 ./scripts/clean.sh     # Clean build artifacts and cache files
 
-# Testing (comprehensive test suite - 308 tests, 90% coverage)
+# Testing (comprehensive test suite - 345 tests, 91% coverage)
 ./scripts/test.sh                    # Run all tests with dynamic discovery
 ./scripts/test.sh -c                # Run tests with coverage report
 ./scripts/test.sh -c -h             # Run tests with HTML coverage report
@@ -37,13 +37,13 @@ pip install -r requirements.txt
 ./scripts/test.sh -p test_config    # Run tests matching pattern
 
 # Testing (direct pytest commands)
-python -m pytest tests/ -v                              # All 308 tests
+python -m pytest tests/ -v                              # All 345 tests
 python -m pytest tests/integration/ -v                  # Integration tests
 python -m pytest tests/unit/ -v                         # Unit tests (majority)
 python -m pytest tests/unit/elements/ -v                # Element-specific tests
 python -m pytest tests/unit/elements/table/ -v          # Table module tests
 python -m pytest tests/test_browser.py -v               # Single test file
-python -m pytest tests/ --cov=src --cov-report=html     # With 90% coverage
+python -m pytest tests/ --cov=src --cov-report=html     # With 91% coverage
 ```
 
 ### Individual Tools
@@ -210,8 +210,8 @@ tests/
 ./scripts/test.sh -f                # Fast unit tests only (~0.2s)
 
 # Full testing workflow
-./scripts/test.sh                   # All 308 tests with dynamic discovery
-./scripts/test.sh -c               # With coverage report (90% coverage)
+./scripts/test.sh                   # All 345 tests with dynamic discovery
+./scripts/test.sh -c               # With coverage report (91% coverage)
 ./scripts/test.sh -c -h            # With HTML coverage report
 
 # Specific testing
@@ -222,8 +222,8 @@ tests/
 ```
 
 ### Coverage & Quality Achievements
-- **Overall Coverage**: 90% (up from 76%)
-- **Test Count**: 308 tests (up from 20)
+- **Overall Coverage**: 91% (up from 76%)
+- **Test Count**: 345 tests (up from 20)
 - **Code Quality**: Zero flake8 violations, zero mypy errors
 - **Import Standards**: Perfect import ordering and grouping
 - **Test Infrastructure**: Professional fixtures, mocks, and utilities
@@ -239,7 +239,7 @@ When making changes to this codebase, follow these principles established during
 4. **Handle Errors Properly**: Use custom exceptions from `exceptions.py` for specific error types
 5. **Maintain Modularity**: Keep table-related changes within the `elements/table/` module
 6. **Follow Type Safety**: Maintain proper type annotations, especially for Optional parameters
-7. **Preserve Test Coverage**: Ensure all changes maintain the existing test suite (308 tests, 90% coverage)
+7. **Preserve Test Coverage**: Ensure all changes maintain the existing test suite (345 tests, 91% coverage)
 
 ## Configuration Access Patterns
 
@@ -285,7 +285,7 @@ The project underwent comprehensive refactoring to transform it from an educatio
 10. **Documentation**: Updated README.md and CLAUDE.md with new architecture
 
 ### ✅ Phase 3: Testing Excellence (Completed)
-11. **Comprehensive Test Suite**: Expanded from 20 to 308 tests with 90% coverage
+11. **Comprehensive Test Suite**: Expanded from 20 to 345 tests with 91% coverage
 12. **Testing Infrastructure**: Built professional fixtures, mocks, and test utilities (TestDataBuilder, MockFactory)
 13. **Dynamic Test Discovery**: Automated test detection with pattern-based inclusion
 14. **Element Coverage**: Complete testing for all HTML element classes and table module
@@ -298,7 +298,7 @@ The project underwent comprehensive refactoring to transform it from an educatio
 - **Type Safety**: Comprehensive type annotations with strict checking (0 suppressions)
 - **Developer Experience**: Automated quality checks prevent issues before commit
 - **Configuration**: Modern tool configuration without duplicates
-- **Testing**: Expanded from 76% to 90% coverage (20 → 308 tests passing)
+- **Testing**: Expanded from 76% to 91% coverage (20 → 345 tests passing)
 - **Performance**: Optimized font caching and reduced redundant calculations
 
 **Before**: Good educational example with basic structure

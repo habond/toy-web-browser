@@ -7,9 +7,11 @@ from typing import Optional
 from ..html_parser import DOMNode
 from .base import BaseElement
 from .block import BlockElement
+from .button import ButtonElement
 from .heading import HeadingElement
 from .inline import InlineElement
 from .list import ListElement, ListItemElement
+from .pre import PreElement
 from .special import BreakElement, HorizontalRuleElement
 from .table import TableCellElement, TableElement, TableRowElement
 from .text import TextElement
@@ -22,7 +24,13 @@ class ElementFactory:
     HEADING_TAGS = {"h1", "h2", "h3", "h4", "h5", "h6"}
 
     # Block-level tags
-    BLOCK_TAGS = {"p", "div", "blockquote", "pre"}
+    BLOCK_TAGS = {"p", "div", "blockquote"}
+
+    # Preformatted tags
+    PRE_TAGS = {"pre"}
+
+    # Button tags
+    BUTTON_TAGS = {"button"}
 
     # List tags
     LIST_TAGS = {"ul", "ol"}
@@ -50,6 +58,10 @@ class ElementFactory:
             return HeadingElement(dom_node)
         elif tag in cls.BLOCK_TAGS:
             return BlockElement(dom_node)
+        elif tag in cls.PRE_TAGS:
+            return PreElement(dom_node)
+        elif tag in cls.BUTTON_TAGS:
+            return ButtonElement(dom_node)
         elif tag in cls.LIST_TAGS:
             return ListElement(dom_node)
         elif tag == "li":

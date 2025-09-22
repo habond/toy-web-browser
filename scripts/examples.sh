@@ -13,8 +13,8 @@ echo "🎨 Rendering all example files..."
 # Create output directory if it doesn't exist
 mkdir -p output_images
 
-# Render each example file
-for html_file in examples/*.html; do
+# Render each example file (sorted for consistent order)
+for html_file in $(ls examples/*.html 2>/dev/null | sort); do
     if [ -f "$html_file" ]; then
         filename=$(basename "$html_file" .html)
         output_file="${filename}.png"

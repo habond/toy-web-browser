@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Tables Demonstration</h1>
+
+    <p>This example demonstrates comprehensive table functionality with headers, data cells, and various content types.</p>
+
+    <h2>Basic Table with Headers</h2>
+    <p>Tables support both header cells (th) and data cells (td) with equal-width columns and grid borders:</p>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>City</th>
+            <th>Occupation</th>
+        </tr>
+        <tr>
+            <td>Alice Johnson</td>
+            <td>30</td>
+            <td>New York</td>
+            <td>Software Engineer</td>
+        </tr>
+        <tr>
+            <td>Bob Smith</td>
+            <td>25</td>
+            <td>San Francisco</td>
+            <td>Designer</td>
+        </tr>
+        <tr>
+            <td>Charlie Brown</td>
+            <td>35</td>
+            <td>Chicago</td>
+            <td>Product Manager</td>
+        </tr>
+    </table>
+
+    <h2>Two-Column Configuration Table</h2>
+    <p>Simple key-value style tables:</p>
+
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Table borders</td>
+            <td>Supported</td>
+        </tr>
+        <tr>
+            <td>Header cells (th)</td>
+            <td>Supported</td>
+        </tr>
+        <tr>
+            <td>Data cells (td)</td>
+            <td>Supported</td>
+        </tr>
+        <tr>
+            <td>Equal-width columns</td>
+            <td>Automatic</td>
+        </tr>
+        <tr>
+            <td>Variable column widths</td>
+            <td>Not supported</td>
+        </tr>
+        <tr>
+            <td>Cell spanning (colspan/rowspan)</td>
+            <td>Not supported</td>
+        </tr>
+    </table>
+
+    <h2>Table with Formatted Content</h2>
+    <p>Table cells can contain formatted text and various HTML elements:</p>
+
+    <table>
+        <tr>
+            <th>Element Type</th>
+            <th>Example</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><b>Bold Text</b></td>
+            <td><b>Important data</b></td>
+            <td>Bold formatting in cells</td>
+        </tr>
+        <tr>
+            <td><i>Italic Text</i></td>
+            <td><i>Emphasized content</i></td>
+            <td>Italic formatting in cells</td>
+        </tr>
+        <tr>
+            <td><code>Code Text</code></td>
+            <td><code>function_name()</code></td>
+            <td>Monospace code formatting</td>
+        </tr>
+        <tr>
+            <td><a href="#">Links</a></td>
+            <td><a href="#">Click here</a></td>
+            <td>Clickable links in cells</td>
+        </tr>
+        <tr>
+            <td>Mixed</td>
+            <td><b>Bold</b> and <code>code</code></td>
+            <td>Multiple formats combined</td>
+        </tr>
+    </table>
+
+    <h2>Wide Table with Long Content</h2>
+    <p>Tables handle text wrapping within cells when content is longer:</p>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Long Text Content</th>
+        </tr>
+        <tr>
+            <td>001</td>
+            <td>Short desc</td>
+            <td>This is a longer piece of text that should wrap within the table cell boundaries when it exceeds the available column width</td>
+        </tr>
+        <tr>
+            <td>002</td>
+            <td>Another description</td>
+            <td>More lengthy content to demonstrate how the table renderer handles text that needs to be wrapped across multiple lines within a single cell</td>
+        </tr>
+    </table>
+
+    <h2>Single Column Table</h2>
+    <p>Edge case testing with minimal table structure:</p>
+
+    <table>
+        <tr>
+            <th>Single Column Header</th>
+        </tr>
+        <tr>
+            <td>First data cell</td>
+        </tr>
+        <tr>
+            <td>Second data cell</td>
+        </tr>
+        <tr>
+            <td>Third data cell with <b>formatting</b></td>
+        </tr>
+    </table>
+
+    <h2>Headers-Only Table</h2>
+    <p>Table with only header row:</p>
+
+    <table>
+        <tr>
+            <th>Column A</th>
+            <th>Column B</th>
+            <th>Column C</th>
+        </tr>
+    </table>
+</body>
+</html>

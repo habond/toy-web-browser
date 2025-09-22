@@ -28,9 +28,12 @@ class LayoutNode:
         self.children: List[LayoutNode] = []
         # Additional attributes that may be set during layout
         self.lines: Optional[List[str]] = None
+        self.font_type: Optional[str] = None
         self.font_size: Optional[float] = None
         self.marker: Optional[str] = None
         self.marker_pos: Optional[Tuple[float, float]] = None
+        self.button_text: Optional[str] = None
+        self.button_padding: Optional[float] = None
 
     def add_child(self, child: "LayoutNode") -> None:
         self.children.append(child)

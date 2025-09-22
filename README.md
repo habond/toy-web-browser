@@ -29,8 +29,9 @@ A simplified web browser that renders basic HTML to PNG images. This educational
 
 - **Structure**: `<html>`, `<body>`, `<div>`
 - **Headings**: `<h1>` to `<h6>`
-- **Text**: `<p>`, `<br>`, `<hr>`
+- **Text**: `<p>`, `<br>`, `<hr>`, `<pre>` (preformatted text with monospace font)
 - **Formatting**: `<b>`, `<i>`, `<u>`, `<strong>`, `<em>`, `<code>`
+- **Interactive**: `<button>` (rendered with background and border)
 - **Lists**: `<ul>`, `<ol>`, `<li>`
 - **Tables**: `<table>`, `<tr>`, `<td>`, `<th>` (with grid borders and header styling)
 - **Other**: `<blockquote>`, `<a>`, `<span>`
@@ -57,13 +58,13 @@ pip install -r requirements.txt
 Examples:
 ```bash
 # Render to current directory
-./scripts/render.sh examples/test1.html output.png
+./scripts/render.sh examples/01_basic_structure.html output.png
 
 # Render to specific directory
-./scripts/render.sh examples/test1.html test1.png --output-dir output_images
+./scripts/render.sh examples/02_text_formatting.html formatting.png --output-dir output_images
 
 # Short form
-./scripts/render.sh examples/test2.html test2.png -o output_images
+./scripts/render.sh examples/03_headings.html headings.png -o output_images
 ```
 
 The `--output-dir` option allows you to specify a target directory for the output PNG files, keeping your project directory clean.
@@ -82,7 +83,7 @@ toy-web-browser/
 │   ├── layout_engine.py   # Position and size calculation
 │   ├── renderer.py        # PNG image generation
 │   └── elements/          # Element implementations (BaseElement, factories, table module)
-├── tests/                 # Comprehensive test suite (308 tests, 90% coverage)
+├── tests/                 # Comprehensive test suite (345 tests, 91% coverage)
 │   ├── unit/              # Unit tests for all modules and elements
 │   ├── integration/       # End-to-end pipeline tests
 │   ├── fixtures/          # Test utilities and mock factories
@@ -94,7 +95,7 @@ toy-web-browser/
 │   ├── format.sh          # Code formatting (black + isort)
 │   ├── lint.sh            # Quality checks (flake8 + mypy)
 │   └── clean.sh           # Clean build artifacts
-├── examples/              # Example HTML files (6 test cases)
+├── examples/              # Systematic HTML examples (6 comprehensive test cases)
 ├── fonts/                 # Bundled fonts (Open Sans, Source Code Pro)
 ├── output_images/         # Generated PNG output directory
 ├── .github/workflows/     # CI/CD automation (test.yml, ci.yml)
@@ -160,13 +161,14 @@ The browser follows a clean 3-stage rendering pipeline with enhanced modularity:
 
 ## Example Files
 
-The `examples/` directory contains test HTML files:
-- `test1.html`: Basic features demo (headings, paragraphs, lists, formatting)
-- `test2.html`: Text formatting examples (bold, italic, code, links)
-- `test3.html`: Complex nested elements and long text
-- `font_test.html`: Font rendering demonstration
-- `list_test.html`: List examples (ordered and unordered)
-- `table_test.html`: Table examples with headers and data cells
+The `examples/` directory contains a systematic set of HTML files demonstrating all browser capabilities:
+
+- `01_basic_structure.html`: Document structure, divs, blockquotes, line breaks, and separators
+- `02_text_formatting.html`: All text formatting options (bold, italic, code, links, spans, buttons, preformatted text)
+- `03_headings.html`: Complete heading hierarchy (h1-h6) with size multipliers and formatting
+- `04_lists.html`: Comprehensive list examples (ordered, unordered, with various content types)
+- `05_tables.html`: Table functionality with headers, data cells, and formatted content
+- `06_complex_nesting.html`: Advanced nesting scenarios, edge cases, and stress testing
 
 Run all examples at once:
 ```bash
@@ -314,7 +316,7 @@ The project includes comprehensive GitHub Actions workflows for automated qualit
 **Test Workflow (`.github/workflows/test.yml`)**:
 - ✅ **Multi-Python Testing**: Tests on Python 3.10, 3.11, and 3.12
 - ✅ **Quality Checks**: Automated linting, type checking, and formatting validation
-- ✅ **Test Coverage**: 90% coverage reporting with Codecov integration
+- ✅ **Test Coverage**: 91% coverage reporting with Codecov integration
 - ✅ **Example Validation**: Ensures all examples render successfully
 - ✅ **Cross-Platform**: Tests on Ubuntu with proper font dependencies
 
@@ -325,7 +327,7 @@ The project includes comprehensive GitHub Actions workflows for automated qualit
 - 🌐 **Platform Compatibility**: Cross-platform testing (Ubuntu, Windows, macOS)
 
 **Quality Gates**:
-- All tests must pass (308 tests, 90% coverage)
+- All tests must pass (345 tests, 91% coverage)
 - Zero linting violations (flake8, mypy, black, isort)
 - Security scan approval
 - Performance benchmarks within acceptable limits
@@ -366,7 +368,7 @@ The project underwent a comprehensive refactoring to transform it from an educat
 - **Documentation**: Updated README and CLAUDE.md with new architecture
 
 ### ✅ Phase 3: Testing Excellence (Completed)
-- **Comprehensive Test Suite**: Expanded from 20 to 308 tests with 90% coverage
+- **Comprehensive Test Suite**: Expanded from 20 to 345 tests with 91% coverage
 - **Testing Infrastructure**: Built reusable fixtures, mocks, and test utilities
 - **Dynamic Test Discovery**: Automatic test detection as codebase grows
 - **Quality Assurance**: Perfect code quality with zero linting violations
@@ -376,7 +378,7 @@ The project underwent a comprehensive refactoring to transform it from an educat
 - **Maintainability**: +50% through reduced duplication and clearer responsibilities
 - **Code Quality**: Zero flake8 violations, zero mypy errors, perfect import ordering
 - **Type Safety**: Comprehensive type annotations with strict checking (0 suppressions)
-- **Testing**: Expanded from 76% to 90% coverage (20 → 308 tests passing)
+- **Testing**: Expanded from 76% to 91% coverage (20 → 345 tests passing)
 - **Performance**: Optimized font caching and reduced redundant calculations
 - **Developer Experience**: Automated quality checks prevent issues before commit
 

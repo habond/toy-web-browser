@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Complex Nesting and Layout</h1>
+
+    <p>This example demonstrates complex nesting scenarios, edge cases, and comprehensive browser functionality testing.</p>
+
+    <h2>Deep Nesting Structure</h2>
+    <div>
+        <h3>Level 1: Outer Container</h3>
+        <p>This paragraph is in the outer div container.</p>
+
+        <div>
+            <h4>Level 2: Nested Container</h4>
+            <p>This paragraph is in a nested div container with <b>bold</b> and <i>italic</i> text.</p>
+
+            <blockquote>
+                <h5>Level 3: Blockquote Inside Nested Div</h5>
+                <p>Blockquotes can contain multiple elements:</p>
+                <ul>
+                    <li>List item with <code>code formatting</code></li>
+                    <li>Another item with <a href="#">embedded links</a></li>
+                    <li>Item with <strong>strong emphasis</strong> and <em>italics</em></li>
+                </ul>
+
+                <div>
+                    <h6>Level 4: Div Inside Blockquote</h6>
+                    <p>Even deeper nesting with <u>underlined text</u> and mixed formatting.</p>
+
+                    <table>
+                        <tr>
+                            <th>Nested</th>
+                            <th>Table</th>
+                        </tr>
+                        <tr>
+                            <td>Cell with <b>bold</b></td>
+                            <td>Cell with <code>code</code></td>
+                        </tr>
+                    </table>
+
+                    <p>Interactive elements can be nested:</p>
+                    <button>Nested Button</button>
+
+                    <pre>Nested preformatted text
+    with preserved spacing</pre>
+                </div>
+            </blockquote>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Complex Lists and Tables</h2>
+
+    <h3>Lists with Multiple Formatting</h3>
+    <ol>
+        <li>Item with <b>bold</b>, <i>italic</i>, <u>underline</u>, and <code>code</code> all in one</li>
+        <li>Item with nested elements: <strong>strong <em>emphasized <code>code</code></em> text</strong></li>
+        <li>Item with links and code: Visit <a href="#">this link</a> or run <code>command --help</code></li>
+        <li>Long item that demonstrates text wrapping within list items when the content becomes quite lengthy and needs to span multiple lines to fit within the browser's viewport width constraints</li>
+    </ol>
+
+    <h3>Table with Complex Content</h3>
+    <table>
+        <tr>
+            <th>Formatting Type</th>
+            <th>Example</th>
+            <th>Nested Example</th>
+        </tr>
+        <tr>
+            <td><b>Bold combinations</b></td>
+            <td><b>Bold with <i>italic</i> inside</b></td>
+            <td><b>Bold with <code>code</code> and <u>underline</u></b></td>
+        </tr>
+        <tr>
+            <td><i>Italic combinations</i></td>
+            <td><i>Italic with <b>bold</b> inside</i></td>
+            <td><i>Italic with <strong>strong</strong> text</i></td>
+        </tr>
+        <tr>
+            <td><code>Code combinations</code></td>
+            <td><code>function(<b>bold_param</b>)</code></td>
+            <td><code>var = <i>italic_value</i> + <u>underlined</u></code></td>
+        </tr>
+        <tr>
+            <td>Multiple elements</td>
+            <td><a href="#">Link</a> with <span>span</span></td>
+            <td><em>All <strong>the <code>different</code></strong> elements</em></td>
+        </tr>
+    </table>
+
+    <h2>Edge Cases and Stress Testing</h2>
+
+    <h3>Empty and Minimal Elements</h3>
+    <p></p>
+    <div></div>
+    <ul></ul>
+    <ol></ol>
+    <blockquote></blockquote>
+
+    <h3>Very Long Text Wrapping</h3>
+    <p>
+        This is an extremely long paragraph designed to test text wrapping capabilities thoroughly.
+        It contains a substantial amount of text that should wrap across multiple lines when rendered
+        in the browser. The toy browser's text wrapping algorithm needs to handle this gracefully,
+        breaking lines at appropriate points and maintaining proper spacing and alignment throughout
+        the paragraph. Additionally, this paragraph includes some <b>bold text in the middle</b>
+        and some <code>inline code snippets that should also wrap properly</code> along with the
+        rest of the text. The goal is to verify that long content renders correctly without
+        layout issues or text overflow problems. This comprehensive test ensures that the
+        browser can handle real-world content that often contains lengthy paragraphs and
+        mixed formatting elements that need to coexist seamlessly within the document flow.
+    </p>
+
+    <h3>Mixed Content in Blockquote</h3>
+    <blockquote>
+        <h4>Comprehensive Blockquote Content</h4>
+        <p>This blockquote contains multiple types of content to test complex rendering:</p>
+
+        <ul>
+            <li>Unordered list inside blockquote</li>
+            <li>List item with <a href="#">links</a> and <code>code</code></li>
+        </ul>
+
+        <ol>
+            <li>Ordered list also inside blockquote</li>
+            <li>Numbered item with <b>bold</b> and <i>italic</i> formatting</li>
+        </ol>
+
+        <p>Regular paragraph within the blockquote with <em>emphasized text</em>.</p>
+
+        <hr>
+
+        <p>Final paragraph after horizontal rule, with comprehensive formatting: <strong>strong</strong>, <u>underline</u>, <span>span</span>, and <code>inline code</code>.</p>
+    </blockquote>
+
+    <h2>Interactive and Special Elements</h2>
+
+    <h3>Button Variations</h3>
+    <p>Multiple buttons in paragraph context:</p>
+    <p>
+        Here are some buttons: <button>Action</button> and <button>Save</button> and <button>Delete</button>
+    </p>
+
+    <h3>Code Blocks and Preformatted Content</h3>
+    <pre>#!/bin/bash
+# Script with preserved formatting
+function deploy() {
+    echo "Deploying application..."
+    ./build.sh
+    ./test.sh
+    if [ $? -eq 0 ]; then
+        echo "✅ Deployment successful"
+    else
+        echo "❌ Deployment failed"
+        exit 1
+    fi
+}</pre>
+
+    <h2>Final Integration Test</h2>
+    <p>
+        This concluding section combines <b>all</b> supported elements:
+        <i>headings</i>, <u>paragraphs</u>, <code>lists</code>,
+        <strong>tables</strong>, <em>formatting</em>, <a href="#">links</a>,
+        <span>organizational elements</span>, <button>buttons</button>, and preformatted text
+        in a single comprehensive test.
+    </p>
+
+    <pre>Final code example:
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Complete HTML Test&lt;/h1&gt;
+        &lt;button&gt;Interactive Element&lt;/button&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+</body>
+</html>
