@@ -75,7 +75,7 @@ repos:
       - id: pytest
         name: Run pytest
         description: "Run all tests to ensure functionality"
-        entry: bash -c "if [ -n \"$CI\" ] || [ -n \"$GITHUB_ACTIONS\" ]; then python -m pytest tests/ -v --tb=short; elif [ -d \"venv\" ]; then source venv/bin/activate && python -m pytest tests/ -v --tb=short; else python -m pytest tests/ -v --tb=short; fi"
+        entry: ./scripts/test.sh
         language: system
         types: [python]
         pass_filenames: false
