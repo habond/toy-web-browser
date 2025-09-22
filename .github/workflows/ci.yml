@@ -46,15 +46,7 @@ jobs:
 
     - name: Run comprehensive test suite
       run: |
-        python -m pytest tests/ -v --cov=src --cov-report=xml --cov-report=term-missing
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: true
+        python -m pytest tests/ -v --cov=src --cov-report=term-missing
 
     - name: Test example rendering
       run: |
