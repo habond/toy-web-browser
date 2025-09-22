@@ -4,7 +4,7 @@
 repos:
   # Built-in pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         description: "Remove trailing whitespace"
@@ -27,7 +27,7 @@ repos:
 
   # Python import sorting with isort
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 6.0.1
     hooks:
       - id: isort
         description: "Sort Python imports"
@@ -75,7 +75,7 @@ repos:
       - id: pytest
         name: Run pytest
         description: "Run all tests to ensure functionality"
-        entry: bash -c "source venv/bin/activate && python -m pytest tests/ -v --tb=short"
+        entry: bash -c "if [ -n \"$CI\" ] || [ -n \"$GITHUB_ACTIONS\" ]; then python -m pytest tests/ -v --tb=short; elif [ -d \"venv\" ]; then source venv/bin/activate && python -m pytest tests/ -v --tb=short; else python -m pytest tests/ -v --tb=short; fi"
         language: system
         types: [python]
         pass_filenames: false
