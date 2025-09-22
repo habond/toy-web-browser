@@ -1,6 +1,6 @@
 """Simple working tests for layout utilities"""
 
-from src.layout_utils import LayoutUtils
+from src.layout import LayoutUtils
 
 
 class TestLayoutUtilsSimple:

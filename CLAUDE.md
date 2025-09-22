@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a toy web browser that renders basic HTML to PNG images for educational purposes. It does NOT support CSS, JavaScript, or network requests - only local HTML files with basic tags including tables.
 
-🆕 **Recently Refactored** (2024) with centralized configuration, modular font management, comprehensive error handling, and enhanced architecture for improved maintainability.
+🆕 **Recently Refactored** (2024) with centralized configuration, modular font management, comprehensive error handling, and enhanced modular architecture for improved maintainability. Latest updates include complete modularization of input elements and layout utilities using professional design patterns.
 
 ## Common Commands
 
@@ -105,10 +105,13 @@ The browser follows a clean 3-stage rendering pipeline with enhanced modularity 
    - Supports multiple font styles with intelligent fallbacks
    - Error handling with custom FontError exceptions
 
-6. **Layout Utilities** (`src/layout_utils.py`): Common layout operations
-   - `LayoutUtils` static methods for text wrapping and dimension calculations
-   - `LayoutMixin` provides reusable layout functionality to element classes
-   - Eliminates code duplication across elements
+6. **Layout Module** (`src/layout/`): Modular layout operations (🆕 Phase 2)
+   - **Modular Design**: Split into focused, single-responsibility modules
+   - **Text Operations** (`text_operations.py`): Character-based text wrapping and calculations
+   - **Font Operations** (`font_operations.py`): Font-aware text measurement and wrapping
+   - **Layout Utilities** (`layout_utils.py`): Unified access point for all layout operations
+   - **Layout Mixin** (`layout_mixin.py`): Reusable element functionality
+   - Eliminates code duplication and improves maintainability
 
 7. **Exception Hierarchy** (`src/exceptions.py`): Comprehensive error handling
    - Custom exceptions: BrowserError, ParseError, LayoutError, RenderError, FontError
@@ -118,6 +121,13 @@ The browser follows a clean 3-stage rendering pipeline with enhanced modularity 
    - **BaseElement**: Abstract base class defining layout() and render() interfaces
    - **ElementFactory**: Factory pattern for creating appropriate element instances
    - **Specialized Elements**: Each HTML tag type has its own focused class
+   - **Input Module** (`src/elements/input/`): Form input elements with strategy pattern (🆕 Phase 2):
+     - `InputElement`: Main coordinator using strategy pattern for different input types
+     - `TextInputRenderer`: Text-based inputs (text, email, password, url, search)
+     - `ButtonInputRenderer`: Button inputs (submit, button, reset)
+     - `CheckboxInputRenderer` & `RadioInputRenderer`: Control inputs with checked state
+     - `FallbackInputRenderer`: Unknown input types with graceful degradation
+     - `InputUtilities`: Shared text truncation and display logic
    - **Table Module** (`src/elements/table/`): Complex table rendering split into components:
      - `TableElement`: Main table coordination and grid rendering
      - `TableRowElement`: Row layout and cell management
@@ -136,10 +146,12 @@ The main entry point (`src/browser.py`) orchestrates these components and provid
 
 ### New Architectural Improvements (🆕 2024)
 - **Professional Font Management**: Dedicated FontManager with caching and error handling
-- **Layout Utilities**: Reusable text wrapping and dimension calculation utilities
+- **Modular Layout System**: Text and font operations split into focused modules (Phase 2)
+- **Strategy Pattern Implementation**: Input elements use strategy pattern for extensibility (Phase 2)
 - **Modular Table System**: Complex table rendering split into focused components
 - **Exception Hierarchy**: Comprehensive error handling with custom exception types
 - **Type Safety**: Enhanced type annotations with Optional handling
+- **Single Responsibility**: All modules follow SRP with files under 100 lines
 
 ### Development Standards
 - **Configuration Management**: Modern pyproject.toml-based tool configuration
@@ -166,10 +178,15 @@ src/
 ├── config.py                  # 🆕 Centralized configuration (BrowserConfig)
 ├── exceptions.py              # 🆕 Custom exception hierarchy
 ├── font_manager.py            # 🆕 Professional font management (FontManager)
-├── layout_utils.py            # 🆕 Layout utilities (LayoutUtils, LayoutMixin)
 ├── html_parser.py            # DOM tree creation (DOMNode, HTMLParser)
 ├── layout_engine.py          # Layout computation (LayoutEngine, LayoutNode, Box)
 ├── renderer.py               # PNG image generation (refactored with FontManager)
+├── layout/                    # 🆕 Modular layout operations (Phase 2)
+│   ├── __init__.py               # Clean interface exports
+│   ├── layout_utils.py           # Unified access point (LayoutUtils)
+│   ├── layout_mixin.py           # Element functionality (LayoutMixin)
+│   ├── text_operations.py        # Character-based text operations
+│   └── font_operations.py        # Font-aware text operations
 └── elements/                  # Element-specific implementations
     ├── base.py               # BaseElement abstract class and ElementFactory
     ├── text.py, block.py     # Text and block elements (div, p, blockquote)
@@ -177,8 +194,16 @@ src/
     ├── list.py               # List elements (ul, ol, li)
     ├── inline.py             # Inline elements (b, i, span, a, code, etc.)
     ├── button.py             # Button elements with background styling
-    ├── input.py              # Form input elements (text, email, submit, checkbox, radio)
+    ├── pre.py                # Preformatted text elements
     ├── special.py            # Special elements (br, hr)
+    ├── input/                # 🆕 Modular input implementation (Phase 2)
+    │   ├── __init__.py              # Clean interface exports
+    │   ├── input_element.py         # Main coordinator with strategy pattern
+    │   ├── base_input.py            # Abstract base and shared utilities
+    │   ├── text_input.py            # Text-based input renderers
+    │   ├── button_input.py          # Button input renderers
+    │   ├── control_input.py         # Checkbox/radio input renderers
+    │   └── fallback_input.py        # Unknown input type handling
     └── table/                # 🆕 Modular table implementation
         ├── table_element.py      # Main table coordination and grid rendering
         ├── table_row_element.py  # Row layout and cell management
@@ -239,11 +264,16 @@ When making changes to this codebase, follow these principles established during
 
 1. **Use Centralized Configuration**: Import settings from `config.py` rather than hardcoding values
 2. **Leverage FontManager**: Use the FontManager class for all font-related operations
-3. **Apply Layout Utilities**: Use LayoutUtils and LayoutMixin for common layout operations
+3. **Apply Layout Module**: Import from `src.layout` for LayoutUtils and LayoutMixin operations
 4. **Handle Errors Properly**: Use custom exceptions from `exceptions.py` for specific error types
-5. **Maintain Modularity**: Keep table-related changes within the `elements/table/` module
-6. **Follow Type Safety**: Maintain proper type annotations, especially for Optional parameters
-7. **Preserve Test Coverage**: Ensure all changes maintain the existing comprehensive test suite
+5. **Maintain Modularity**: Keep specialized changes within appropriate modules:
+   - Table-related: `elements/table/` module
+   - Input-related: `elements/input/` module
+   - Layout operations: `layout/` module
+6. **Follow Design Patterns**: Use strategy pattern for extensible functionality (see input elements)
+7. **Single Responsibility**: Keep modules focused and manageable in size
+8. **Follow Type Safety**: Maintain proper type annotations, especially for Optional parameters
+9. **Preserve Test Coverage**: Ensure all changes maintain the existing comprehensive test suite
 
 ## Configuration Access Patterns
 
@@ -303,16 +333,30 @@ The project underwent comprehensive refactoring to transform it from an educatio
 20. **Comprehensive Type Annotations**: Added missing type annotations throughout test functions and variables
 21. **Union Type Safety**: Fixed all Optional/Union attribute access patterns with proper null checks
 
+### ✅ Phase 5: Modular Architecture Refactoring (Completed 2024)
+22. **Input Element Modularization**: Split large input.py into focused, single-responsibility modules
+    - Strategy pattern implementation with specialized renderers for each input type
+    - Clean separation: TextInputRenderer, ButtonInputRenderer, CheckboxInputRenderer, etc.
+    - Graceful fallback handling for unknown input types
+23. **Layout Utilities Modularization**: Split large layout_utils.py into logical modules
+    - TextOperations: Character-based text wrapping and calculations
+    - FontOperations: Font-aware text measurement and wrapping
+    - LayoutMixin: Element-specific layout functionality
+    - LayoutUtils: Unified access point maintaining backward compatibility
+24. **Single Responsibility Principle**: All modules follow SRP with manageable file sizes
+25. **Eliminated Wrapper Dependencies**: Removed unnecessary layout_utils.py wrapper for cleaner imports
+
 ### 📊 Impact Achieved
-- **Maintainability**: +50% through reduced duplication and clearer responsibilities
+- **Maintainability**: Significantly improved through modular architecture and reduced file complexity
 - **Code Quality**: Zero flake8 violations, zero mypy errors, perfect import organization
-- **Type Safety**: Comprehensive type annotations with strict checking (0 suppressions in source AND tests)
-- **Quality Compliance**: 100% suppression elimination - from 4 suppressions to 0 across entire codebase
+- **Type Safety**: Comprehensive type annotations with strict checking (zero suppressions in source AND tests)
+- **Quality Compliance**: Complete suppression elimination across entire codebase
 - **Test Quality**: Professional test patterns with proper mocking and complete type safety
-- **Developer Experience**: Automated quality checks prevent issues before commit
+- **Developer Experience**: Automated quality checks and modular architecture for easier development
 - **Configuration**: Modern tool configuration without duplicates
 - **Testing**: Dramatically expanded test coverage and comprehensive test suite
-- **Performance**: Optimized font caching and reduced redundant calculations
+- **Architecture**: Professional design patterns (Strategy, Factory) with single-responsibility modules
+- **Extensibility**: Easy to add new input types and layout operations through modular design
 
 **Before**: Good educational example with basic structure
 **After**: Enterprise-grade codebase with professional tooling and practices

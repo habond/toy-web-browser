@@ -186,7 +186,7 @@ class TestTextElement:
 
     def test_text_element_inherits_layout_mixin(self) -> None:
         """Test that TextElement inherits from LayoutMixin"""
-        from src.layout_utils import LayoutMixin
+        from src.layout import LayoutMixin
 
         dom_node = DOMNode("text", text="Test")
         element = TextElement(dom_node)

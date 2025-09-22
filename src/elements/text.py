@@ -6,8 +6,8 @@ from typing import Any, Optional
 
 from PIL import ImageDraw
 
+from ..layout import LayoutMixin, LayoutUtils
 from ..layout_engine import LayoutEngine, LayoutNode
-from ..layout_utils import LayoutMixin, LayoutUtils
 from ..renderer import Renderer
 from .base import BaseElement
 

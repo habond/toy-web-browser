@@ -8,8 +8,8 @@ from PIL import ImageDraw
 
 from ..config import config
 from ..html_parser import DOMNode
+from ..layout import LayoutMixin
 from ..layout_engine import LayoutEngine, LayoutNode
-from ..layout_utils import LayoutMixin
 from ..renderer import Renderer
 from .base import BaseElement
 

@@ -1,9 +1,11 @@
 """Tests for the font manager module"""
 
 import tempfile
+from pathlib import Path
 from typing import Any
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
+from src.exceptions import FontError
 from src.font_manager import FontManager
 
 
@@ -194,3 +196,173 @@ class TestFontManager:
         # Should have no errors and some results
         assert len(errors) == 0
         assert len(results) > 0
+
+    def test_font_manager_with_custom_fonts_dir(self) -> None:
+        """Test FontManager with custom fonts directory"""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            custom_fonts_dir = Path(temp_dir)
+            font_manager = FontManager(fonts_dir=custom_fonts_dir)
+            assert font_manager.fonts_dir == custom_fonts_dir
+
+    @patch("pathlib.Path.exists")
+    @patch("PIL.ImageFont.truetype")
+    def test_regular_font_loading_failure(
+        self, mock_truetype: Mock, mock_exists: Mock
+    ) -> None:
+        """Test FontError when regular font loading fails"""
+        mock_exists.return_value = True
+        mock_truetype.side_effect = Exception("Font corrupted")
+
+        try:
+            FontManager()
+            assert False, "Expected FontError to be raised"
+        except FontError as e:
+            assert "Failed to load regular font" in str(e)
+            assert "Font corrupted" in str(e)
+
+    @patch("pathlib.Path.exists")
+    @patch("PIL.ImageFont.truetype")
+    def test_monospace_font_loading_failure_non_critical(
+        self, mock_truetype: Mock, mock_exists: Mock
+    ) -> None:
+        """Test that monospace font loading failure is handled gracefully"""
+
+        def side_effect(font_path: str, size: int) -> Mock:
+            if "SourceCodePro" in font_path:
+                raise OSError("Monospace font not found")
+            return Mock()
+
+        mock_exists.return_value = True
+        mock_truetype.side_effect = side_effect
+
+        # Should not raise exception, just continue without monospace font
+        font_manager = FontManager()
+        assert font_manager.mono_font is None
+
+    @patch("pathlib.Path.exists")
+    @patch("PIL.ImageFont.truetype")
+    def test_monospace_font_loading_io_error(
+        self, mock_truetype: Mock, mock_exists: Mock
+    ) -> None:
+        """Test that IOError during monospace font loading is handled"""
+
+        def side_effect(font_path: str, size: int) -> Mock:
+            if "SourceCodePro" in font_path:
+                raise IOError("I/O error reading monospace font")
+            return Mock()
+
+        mock_exists.return_value = True
+        mock_truetype.side_effect = side_effect
+
+        # Should not raise exception, just continue without monospace font
+        font_manager = FontManager()
+        assert font_manager.mono_font is None
+
+    @patch("pathlib.Path.exists")
+    @patch("PIL.ImageFont.load_default")
+    def test_fallback_to_default_font_when_no_truetype(
+        self, mock_load_default: Mock, mock_exists: Mock
+    ) -> None:
+        """Test fallback to PIL default font when no TrueType fonts available"""
+        mock_exists.return_value = False  # No font files exist
+        mock_default_font = Mock()
+        mock_load_default.return_value = mock_default_font
+
+        font_manager = FontManager()
+
+        assert font_manager.default_font is mock_default_font
+        mock_load_default.assert_called_once()
+
+    def test_get_font_with_exception_during_truetype_creation(self) -> None:
+        """Test font creation fallback when TrueType font creation fails"""
+        font_manager = FontManager()
+
+        # Mock a FreeTypeFont with a path attribute
+        mock_base_font = Mock()
+        mock_base_font.path = "/fake/font/path.ttf"
+        font_manager.default_font = mock_base_font
+
+        with patch("PIL.ImageFont.truetype") as mock_truetype:
+            mock_truetype.side_effect = Exception("Cannot create font with size")
+
+            # Should fall back to the base font
+            font = font_manager.get_font(size=24)
+            assert font is mock_base_font
+
+    def test_get_font_when_no_base_font_available(self) -> None:
+        """Test get_font when no base font is available"""
+        font_manager = FontManager()
+
+        # Clear all fonts
+        font_manager.default_font = None
+        font_manager.bold_font = None
+        font_manager.mono_font = None
+
+        with patch("PIL.ImageFont.load_default") as mock_load_default:
+            mock_default = Mock()
+            mock_load_default.return_value = mock_default
+
+            font = font_manager.get_font(size=16)
+            assert font is mock_default
+            mock_load_default.assert_called_once()
+
+    def test_get_monospace_font_when_available(self) -> None:
+        """Test getting monospace font when it's available"""
+        font_manager = FontManager()
+
+        mock_mono_font = Mock()
+        font_manager.mono_font = mock_mono_font
+
+        font = font_manager.get_font(monospace=True)
+        # Since get_font creates a new font with the requested size,
+        # we just verify it doesn't crash and returns a font
+        assert font is not None
+
+    def test_get_text_size_with_getbbox(self) -> None:
+        """Test get_text_size using getbbox method (newer PIL)"""
+        font_manager = FontManager()
+
+        mock_font = Mock()
+        mock_font.getbbox.return_value = (0, 0, 100, 20)  # x1, y1, x2, y2
+
+        width, height = font_manager.get_text_size("test", mock_font)
+        assert width == 100
+        assert height == 20
+
+    def test_get_text_size_with_getsize_fallback(self) -> None:
+        """Test get_text_size falling back to getsize method"""
+        font_manager = FontManager()
+
+        mock_font = Mock()
+        # Simulate getbbox not available (raises AttributeError)
+        mock_font.getbbox.side_effect = AttributeError("getbbox not available")
+        mock_font.getsize.return_value = (80, 16)
+
+        width, height = font_manager.get_text_size("test", mock_font)
+        assert width == 80
+        assert height == 16
+
+    def test_get_text_size_ultimate_fallback(self) -> None:
+        """Test get_text_size ultimate fallback when no size methods available"""
+        font_manager = FontManager()
+
+        mock_font = Mock(spec=[])  # Empty spec means no methods available
+        # Using delattr and spec=[] to simulate a font object with no getbbox or getsize
+
+        width, height = font_manager.get_text_size("hello", mock_font)
+        assert width == 5 * 8  # len("hello") * 8
+        assert height == 16
+
+    def test_get_text_size_getsize_method_none(self) -> None:
+        """Test get_text_size when getsize method exists but is None"""
+        font_manager = FontManager()
+
+        mock_font = Mock()
+        mock_font.getbbox.side_effect = AttributeError("getbbox not available")
+
+        # Mock getsize to be None directly on the font object
+        mock_font.getsize = None
+
+        width, height = font_manager.get_text_size("test", mock_font)
+        assert width == 4 * 8  # len("test") * 8
+        assert height == 16

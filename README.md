@@ -9,7 +9,7 @@
 
 A simplified web browser that renders basic HTML to PNG images. This educational project demonstrates the core concepts of browser rendering without the complexity of CSS, JavaScript, or network requests.
 
-🎨 **Recently Refactored** for improved maintainability with centralized configuration, modular font management, comprehensive error handling, and enhanced code organization.
+🎨 **Recently Refactored** with enterprise-grade architecture featuring modular design patterns, centralized configuration, professional font management, and comprehensive error handling for maximum maintainability.
 
 ## Features
 
@@ -19,11 +19,12 @@ A simplified web browser that renders basic HTML to PNG images. This educational
 - Computes layout positions for elements with proper text wrapping
 - Renders HTML to PNG images with professional grid-based table borders
 - Supports dynamic image sizing based on content
-- Clean element-based architecture with modular HTML element classes
+- **Modular architecture** with clean separation of concerns and design patterns
+- **Strategy pattern** implementation for extensible input element rendering
 - **Centralized configuration** system for easy customization
 - **Professional font management** with caching and error handling
 - **Comprehensive error handling** with custom exception hierarchy
-- **Layout utilities** for consistent text and dimension calculations
+- **Modular layout system** split into focused, single-responsibility modules
 
 ## Supported HTML Tags
 
@@ -140,10 +141,12 @@ The browser follows a clean 3-stage rendering pipeline with enhanced modularity:
    - Fallback mechanisms for missing fonts
    - Error handling with custom FontError exceptions
 
-6. **Layout Utilities** (`src/layout_utils.py`): Common layout operations
-   - **LayoutUtils**: Static methods for text wrapping and dimension calculations
+6. **Layout Module** (`src/layout/`): Modular layout operations
+   - **LayoutUtils**: Unified interface for all layout operations
+   - **TextOperations**: Character-based text wrapping and calculations
+   - **FontOperations**: Font-aware text measurement and wrapping
    - **LayoutMixin**: Reusable layout functionality for element classes
-   - Consistent text handling and content sizing
+   - Clean separation of text vs font-aware operations
 
 7. **Exception Hierarchy** (`src/exceptions.py`): Comprehensive error handling
    - **BrowserError**: Base exception for all browser-related errors
@@ -154,7 +157,11 @@ The browser follows a clean 3-stage rendering pipeline with enhanced modularity:
    - **BaseElement**: Abstract base class defining layout() and render() interfaces
    - **ElementFactory**: Factory pattern for creating appropriate element instances
    - **Specialized Elements**: Each HTML tag type has its own focused class
-   - **Table Module**: Complex table rendering split into focused components
+   - **Input Module** (`elements/input/`): Form elements with strategy pattern
+     - InputElement: Main coordinator using strategy pattern
+     - Specialized renderers: TextInputRenderer, ButtonInputRenderer, CheckboxInputRenderer
+     - Graceful fallback for unknown input types
+   - **Table Module** (`elements/table/`): Complex table rendering split into focused components
      - TableElement: Main table coordination
      - TableRowElement: Row layout and management
      - TableCellElement: Individual cell rendering
