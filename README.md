@@ -2,9 +2,10 @@
 
 [![Tests](https://github.com/habond/toy-web-browser/actions/workflows/test.yml/badge.svg)](https://github.com/habond/toy-web-browser/actions/workflows/test.yml)
 [![CI/CD Pipeline](https://github.com/habond/toy-web-browser/actions/workflows/ci.yml/badge.svg)](https://github.com/habond/toy-web-browser/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/habond/toy-web-browser/branch/main/graph/badge.svg)](https://codecov.io/gh/habond/toy-web-browser)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Last Commit](https://img.shields.io/github/last-commit/habond/toy-web-browser)](https://github.com/habond/toy-web-browser/commits/main)
 
 A simplified web browser that renders basic HTML to PNG images. This educational project demonstrates the core concepts of browser rendering without the complexity of CSS, JavaScript, or network requests.
 
