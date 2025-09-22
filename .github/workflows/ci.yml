@@ -127,27 +127,42 @@ jobs:
       run: |
         mkdir -p output_images
 
-        # Benchmark example rendering
+        # Benchmark example rendering across different complexity levels
+        echo "🚀 Testing basic structure rendering performance..."
         start_time=$(date +%s.%N)
         for i in {0..4}; do
-          python -m src.browser examples/test1.html "output_images/perf_test_${i}.png"
+          python -m src.browser examples/01_basic_structure.html "output_images/perf_basic_${i}.png"
         done
         end_time=$(date +%s.%N)
+        basic_time=$(python -c "print((float('$end_time') - float('$start_time')) / 5)")
 
-        # Calculate average time
+        echo "🚀 Testing complex nesting rendering performance..."
+        start_time=$(date +%s.%N)
+        for i in {0..2}; do
+          python -m src.browser examples/06_complex_nesting.html "output_images/perf_complex_${i}.png"
+        done
+        end_time=$(date +%s.%N)
+        complex_time=$(python -c "print((float('$end_time') - float('$start_time')) / 3)")
+
+        # Calculate and report performance
         python -c "
         import sys
-        start_time = float('$start_time')
-        end_time = float('$end_time')
-        avg_time = (end_time - start_time) / 5
-        print(f'Average rendering time: {avg_time:.3f}s')
+        basic_avg = float('$basic_time')
+        complex_avg = float('$complex_time')
+
+        print(f'Basic structure average: {basic_avg:.3f}s')
+        print(f'Complex nesting average: {complex_avg:.3f}s')
+        print(f'Performance ratio (complex/basic): {complex_avg/basic_avg:.2f}x')
 
         # Fail if performance degrades significantly
-        if avg_time > 5.0:
-            print('WARNING: Rendering performance has degraded')
+        if basic_avg > 3.0:
+            print('❌ Basic rendering performance degraded')
+            sys.exit(1)
+        elif complex_avg > 8.0:
+            print('❌ Complex rendering performance degraded')
             sys.exit(1)
         else:
-            print('✅ Performance test passed')
+            print('✅ Performance benchmarks passed')
         "
 
     - name: Memory usage test
@@ -156,7 +171,7 @@ jobs:
         initial_memory=$(ps -o rss= -p $$)
 
         # Run the browser to render a complex example
-        python -m src.browser examples/test3.html output_images/memory_test.png
+        python -m src.browser examples/06_complex_nesting.html output_images/memory_test.png
 
         final_memory=$(ps -o rss= -p $$)
         memory_diff=$((final_memory - initial_memory))
@@ -280,22 +295,22 @@ jobs:
     - name: Test basic rendering (Unix)
       if: matrix.os != 'windows-latest'
       run: |
-        python -m src.browser examples/test1.html output_test.png
+        python -m src.browser examples/01_basic_structure.html output_test.png
         ls -la output_test.png  # Verify file was created
 
     - name: Test basic rendering (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        python -m src.browser examples/test1.html output_test.png
+        python -m src.browser examples/01_basic_structure.html output_test.png
         Get-ChildItem output_test.png  # Verify file was created
 
     - name: Cross-platform script test (Unix)
       if: matrix.os != 'windows-latest'
       run: |
         chmod +x scripts/render.sh
-        ./scripts/render.sh examples/test1.html platform_test.png --output-dir output_images
+        ./scripts/render.sh examples/01_basic_structure.html platform_test.png --output-dir output_images
 
     - name: Cross-platform script test (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        python -m src.browser examples/test1.html platform_test.png
+        python -m src.browser examples/01_basic_structure.html platform_test.png
