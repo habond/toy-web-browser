@@ -3,9 +3,21 @@
 
 set -e
 
-# Activate virtual environment if it exists
-if [ -d "venv" ]; then
+# Check if we're in CI or if dependencies are available
+if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ]; then
+    echo "🤖 Running in CI environment, using system Python"
+elif [ -d "venv" ]; then
+    echo "🐍 Activating virtual environment"
     source venv/bin/activate
+else
+    # Try to check if dependencies are available globally
+    if python -c "import pytest" 2>/dev/null; then
+        echo "📦 Using globally installed dependencies"
+    else
+        echo "⚠️  Virtual environment not found and pytest not available globally."
+        echo "Please run 'python -m venv venv && source venv/bin/activate && pip install -r requirements.txt' first."
+        exit 1
+    fi
 fi
 
 # Default values
