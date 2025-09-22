@@ -32,6 +32,7 @@ A simplified web browser that renders basic HTML to PNG images. This educational
 - **Text**: `<p>`, `<br>`, `<hr>`, `<pre>` (preformatted text with monospace font)
 - **Formatting**: `<b>`, `<i>`, `<u>`, `<strong>`, `<em>`, `<code>`
 - **Interactive**: `<button>` (rendered with background and border)
+- **Forms**: `<input>` (text, email, password, URL, search, submit, button, reset, checkbox, radio)
 - **Lists**: `<ul>`, `<ol>`, `<li>`
 - **Tables**: `<table>`, `<tr>`, `<td>`, `<th>` (with grid borders and header styling)
 - **Other**: `<blockquote>`, `<a>`, `<span>`
@@ -95,7 +96,7 @@ toy-web-browser/
 │   ├── format.sh          # Code formatting (black + isort)
 │   ├── lint.sh            # Quality checks (flake8 + mypy)
 │   └── clean.sh           # Clean build artifacts
-├── examples/              # Systematic HTML examples (6 comprehensive test cases)
+├── examples/              # Systematic HTML examples (7 comprehensive test cases)
 ├── fonts/                 # Bundled fonts (Open Sans, Source Code Pro)
 ├── output_images/         # Generated PNG output directory
 ├── .github/workflows/     # CI/CD automation (test.yml, ci.yml)

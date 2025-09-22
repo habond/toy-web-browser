@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Forms and Input Elements</h1>
+
+    <p>This example demonstrates all supported form input types and interactive elements.</p>
+
+    <h2>Text Input Types</h2>
+    <p>Various text input fields with different purposes:</p>
+
+    <p>Basic text: <input type="text" value="Sample text"></p>
+    <p>Email field: <input type="email" placeholder="user@example.com"></p>
+    <p>Password field: <input type="password" value="hidden"></p>
+    <p>URL field: <input type="url" placeholder="https://example.com"></p>
+    <p>Search field: <input type="search" placeholder="Search terms"></p>
+
+    <h2>Button Input Types</h2>
+    <p>Different types of button inputs for form actions:</p>
+
+    <p><input type="submit" value="Submit Form"></p>
+    <p><input type="button" value="Generic Button"></p>
+    <p><input type="reset" value="Reset Form"></p>
+    <p><input type="button" value="Custom Action"></p>
+
+    <h2>Button Elements</h2>
+    <p>Regular button elements render with background and borders:</p>
+    <p><button>Click Me</button></p>
+    <p><button>Submit Form</button></p>
+    <p><button>Cancel Operation</button></p>
+
+    <h3>Button vs Input Comparison</h3>
+    <p>Regular buttons: <button>Button Element</button></p>
+    <p>Input buttons: <input type="button" value="Input Button"></p>
+
+    <h2>Choice Input Types</h2>
+    <p>Selection inputs for user choices:</p>
+
+    <h3>Checkboxes</h3>
+    <p><input type="checkbox" value="option1"> Unchecked option</p>
+    <p><input type="checkbox" value="option2" checked> Checked option</p>
+    <p><input type="checkbox" value="option3"> Another option</p>
+    <p><input type="checkbox" value="option4" checked> Pre-selected option</p>
+
+    <h3>Radio Buttons</h3>
+    <p>Single selection from a group:</p>
+    <p><input type="radio" name="size" value="small"> Small</p>
+    <p><input type="radio" name="size" value="medium" checked> Medium</p>
+    <p><input type="radio" name="size" value="large"> Large</p>
+
+    <p>Another radio group:</p>
+    <p><input type="radio" name="color" value="red"> Red</p>
+    <p><input type="radio" name="color" value="green"> Green</p>
+    <p><input type="radio" name="color" value="blue" checked> Blue</p>
+
+    <h2>Form Layout Examples</h2>
+
+    <h3>Simple Contact Form</h3>
+    <p>Name: <input type="text" placeholder="Your full name"></p>
+    <p>Email: <input type="email" placeholder="your@email.com"></p>
+    <p>Website: <input type="url" placeholder="https://yoursite.com"></p>
+    <p>Newsletter: <input type="checkbox" checked> Subscribe to updates</p>
+    <p><input type="submit" value="Send Message"></p>
+
+    <h3>User Preferences</h3>
+    <p>Username: <input type="text" value="johndoe"></p>
+    <p>Password: <input type="password" placeholder="Enter new password"></p>
+    <p>Theme preference:</p>
+    <p><input type="radio" name="theme" value="light" checked> Light theme</p>
+    <p><input type="radio" name="theme" value="dark"> Dark theme</p>
+    <p>Features:</p>
+    <p><input type="checkbox" value="notifications" checked> Email notifications</p>
+    <p><input type="checkbox" value="analytics"> Usage analytics</p>
+    <p><input type="checkbox" value="beta"> Beta features</p>
+    <p><input type="submit" value="Save Settings"> <input type="reset" value="Reset"></p>
+
+    <h3>Survey Form</h3>
+    <p>How did you hear about us?</p>
+    <p><input type="radio" name="source" value="search"> Search engine</p>
+    <p><input type="radio" name="source" value="social"> Social media</p>
+    <p><input type="radio" name="source" value="friend"> Friend recommendation</p>
+    <p><input type="radio" name="source" value="ad"> Advertisement</p>
+
+    <p>Which features interest you? (Select all that apply)</p>
+    <p><input type="checkbox" value="mobile"> Mobile app</p>
+    <p><input type="checkbox" value="api"> Developer API</p>
+    <p><input type="checkbox" value="integrations"> Third-party integrations</p>
+    <p><input type="checkbox" value="support"> 24/7 support</p>
+
+    <p>Additional comments: <input type="text" placeholder="Optional feedback"></p>
+    <p><input type="submit" value="Submit Survey"></p>
+
+    <h2>Edge Cases and Variations</h2>
+
+    <h3>Empty and Default Values</h3>
+    <p>Empty text: <input type="text"></p>
+    <p>Empty email: <input type="email"></p>
+    <p>No placeholder: <input type="text" value=""></p>
+    <p>Default submit: <input type="submit"></p>
+    <p>Default button: <input type="button"></p>
+    <p>Default reset: <input type="reset"></p>
+
+    <h3>Long Values and Placeholders</h3>
+    <p>Long value: <input type="text" value="This is a very long input value that tests how the browser handles lengthy text content"></p>
+    <p>Long placeholder: <input type="text" placeholder="This is a very long placeholder text that demonstrates text handling in input fields"></p>
+
+    <h3>Mixed Interactive Elements</h3>
+    <p>
+        Form with mixed elements:
+        <input type="text" value="text">
+        <button>Button</button>
+        <input type="checkbox" checked>
+        <input type="submit" value="Submit">
+    </p>
+
+    <h2>Input Types Not Supported</h2>
+    <p>These input types fall back to default behavior:</p>
+    <p>File input: <input type="file"></p>
+    <p>Date input: <input type="date"></p>
+    <p>Number input: <input type="number" value="42"></p>
+    <p>Range input: <input type="range"></p>
+</body>
+</html>

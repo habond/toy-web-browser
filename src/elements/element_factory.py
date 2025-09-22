@@ -10,6 +10,7 @@ from .block import BlockElement
 from .button import ButtonElement
 from .heading import HeadingElement
 from .inline import InlineElement
+from .input import InputElement
 from .list import ListElement, ListItemElement
 from .pre import PreElement
 from .special import BreakElement, HorizontalRuleElement
@@ -31,6 +32,9 @@ class ElementFactory:
 
     # Button tags
     BUTTON_TAGS = {"button"}
+
+    # Input tags
+    INPUT_TAGS = {"input"}
 
     # List tags
     LIST_TAGS = {"ul", "ol"}
@@ -62,6 +66,8 @@ class ElementFactory:
             return PreElement(dom_node)
         elif tag in cls.BUTTON_TAGS:
             return ButtonElement(dom_node)
+        elif tag in cls.INPUT_TAGS:
+            return InputElement(dom_node)
         elif tag in cls.LIST_TAGS:
             return ListElement(dom_node)
         elif tag == "li":

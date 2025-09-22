@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ./scripts/lint.sh      # Run flake8 + mypy + format checks
 ./scripts/clean.sh     # Clean build artifacts and cache files
 
-# Testing (comprehensive test suite - 345 tests, 91% coverage)
+# Testing (comprehensive test suite - 363 tests, 91% coverage)
 ./scripts/test.sh                    # Run all tests with dynamic discovery
 ./scripts/test.sh -c                # Run tests with coverage report
 ./scripts/test.sh -c -h             # Run tests with HTML coverage report
@@ -37,7 +37,7 @@ pip install -r requirements.txt
 ./scripts/test.sh -p test_config    # Run tests matching pattern
 
 # Testing (direct pytest commands)
-python -m pytest tests/ -v                              # All 345 tests
+python -m pytest tests/ -v                              # All 363 tests
 python -m pytest tests/integration/ -v                  # Integration tests
 python -m pytest tests/unit/ -v                         # Unit tests (majority)
 python -m pytest tests/unit/elements/ -v                # Element-specific tests
@@ -154,7 +154,7 @@ The main entry point (`src/browser.py`) orchestrates these components and provid
 
 ## Supported HTML Features
 
-Basic structure, headings (h1-h6), paragraphs, lists (ul/ol/li), tables (table/tr/td/th), text formatting (b/i/u/strong/em/code), links, and line breaks. Tables feature equal-width columns, grid borders, and header cell styling. See README.md for complete list.
+Basic structure, headings (h1-h6), paragraphs, lists (ul/ol/li), tables (table/tr/td/th), text formatting (b/i/u/strong/em/code), interactive elements (button), form inputs (input with text, email, password, URL, search, submit, button, reset, checkbox, radio), links, and line breaks. Tables feature equal-width columns, grid borders, and header cell styling. Form inputs include proper text overflow handling and visual styling. See README.md for complete list.
 
 ## Project Structure
 
@@ -174,6 +174,8 @@ src/
     ├── heading.py            # Heading elements (h1-h6, size multipliers)
     ├── list.py               # List elements (ul, ol, li)
     ├── inline.py             # Inline elements (b, i, span, a, code, etc.)
+    ├── button.py             # Button elements with background styling
+    ├── input.py              # Form input elements (text, email, submit, checkbox, radio)
     ├── special.py            # Special elements (br, hr)
     └── table/                # 🆕 Modular table implementation
         ├── table_element.py      # Main table coordination and grid rendering
@@ -184,9 +186,9 @@ src/
 
 ## Testing Infrastructure (🆕 2024)
 
-The project includes comprehensive testing infrastructure with **90% code coverage** and **308 passing tests**:
+The project includes comprehensive testing infrastructure with **91% code coverage** and **363 passing tests**:
 
-### Test Organization (308 Tests, 90% Coverage)
+### Test Organization (363 Tests, 91% Coverage)
 ```
 tests/
 ├── unit/                    # Comprehensive unit tests for all modules
@@ -210,7 +212,7 @@ tests/
 ./scripts/test.sh -f                # Fast unit tests only (~0.2s)
 
 # Full testing workflow
-./scripts/test.sh                   # All 345 tests with dynamic discovery
+./scripts/test.sh                   # All 363 tests with dynamic discovery
 ./scripts/test.sh -c               # With coverage report (91% coverage)
 ./scripts/test.sh -c -h            # With HTML coverage report
 
@@ -223,7 +225,7 @@ tests/
 
 ### Coverage & Quality Achievements
 - **Overall Coverage**: 91% (up from 76%)
-- **Test Count**: 345 tests (up from 20)
+- **Test Count**: 363 tests (up from 20)
 - **Code Quality**: Zero flake8 violations, zero mypy errors
 - **Import Standards**: Perfect import ordering and grouping
 - **Test Infrastructure**: Professional fixtures, mocks, and utilities
@@ -239,7 +241,7 @@ When making changes to this codebase, follow these principles established during
 4. **Handle Errors Properly**: Use custom exceptions from `exceptions.py` for specific error types
 5. **Maintain Modularity**: Keep table-related changes within the `elements/table/` module
 6. **Follow Type Safety**: Maintain proper type annotations, especially for Optional parameters
-7. **Preserve Test Coverage**: Ensure all changes maintain the existing test suite (345 tests, 91% coverage)
+7. **Preserve Test Coverage**: Ensure all changes maintain the existing test suite (363 tests, 91% coverage)
 
 ## Configuration Access Patterns
 
@@ -285,7 +287,7 @@ The project underwent comprehensive refactoring to transform it from an educatio
 10. **Documentation**: Updated README.md and CLAUDE.md with new architecture
 
 ### ✅ Phase 3: Testing Excellence (Completed)
-11. **Comprehensive Test Suite**: Expanded from 20 to 345 tests with 91% coverage
+11. **Comprehensive Test Suite**: Expanded from 20 to 363 tests with 91% coverage
 12. **Testing Infrastructure**: Built professional fixtures, mocks, and test utilities (TestDataBuilder, MockFactory)
 13. **Dynamic Test Discovery**: Automated test detection with pattern-based inclusion
 14. **Element Coverage**: Complete testing for all HTML element classes and table module
@@ -298,7 +300,7 @@ The project underwent comprehensive refactoring to transform it from an educatio
 - **Type Safety**: Comprehensive type annotations with strict checking (0 suppressions)
 - **Developer Experience**: Automated quality checks prevent issues before commit
 - **Configuration**: Modern tool configuration without duplicates
-- **Testing**: Expanded from 76% to 91% coverage (20 → 345 tests passing)
+- **Testing**: Expanded from 76% to 91% coverage (20 → 363 tests passing)
 - **Performance**: Optimized font caching and reduced redundant calculations
 
 **Before**: Good educational example with basic structure

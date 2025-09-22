@@ -6,6 +6,7 @@ from src.elements.button import ButtonElement
 from src.elements.element_factory import ElementFactory
 from src.elements.heading import HeadingElement
 from src.elements.inline import InlineElement
+from src.elements.input import InputElement
 from src.elements.list import ListElement, ListItemElement
 from src.elements.pre import PreElement
 from src.elements.special import BreakElement, HorizontalRuleElement
@@ -60,6 +61,14 @@ class TestElementFactory:
         dom_node = DOMNode("button")
         element = ElementFactory.create_element(dom_node)
         assert isinstance(element, ButtonElement)
+
+    def test_create_input_element(self) -> None:
+        """Test creating input element"""
+        from src.html_parser import DOMNode
+
+        dom_node = DOMNode("input")
+        element = ElementFactory.create_element(dom_node)
+        assert isinstance(element, InputElement)
 
     def test_create_inline_elements(self) -> None:
         """Test creating inline elements"""
@@ -228,6 +237,8 @@ class TestElementFactory:
             "pre": PreElement,
             # Button elements
             "button": ButtonElement,
+            # Input elements
+            "input": InputElement,
             # Inline elements
             "span": InlineElement,
             "a": InlineElement,
