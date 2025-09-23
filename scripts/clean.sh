@@ -3,6 +3,13 @@
 
 set -e
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Change to project root directory
+cd "$PROJECT_ROOT"
+
 echo "🧹 Cleaning toy web browser project..."
 
 # Check if we're in CI or if dependencies are available
@@ -35,7 +42,6 @@ rm -rf *.egg-info/
 
 echo "🗑️  Removing output images..."
 rm -rf output_images/
-mkdir -p output_images
 
 echo "🗑️  Removing temporary files..."
 find . -name "*.tmp" -delete 2>/dev/null || true
@@ -58,4 +64,3 @@ echo "   - Documentation (README.md, CLAUDE.md)"
 echo "   - Configuration files"
 echo "   - Virtual environment (venv/)"
 echo "   - IDE settings (.vscode/, .idea/)"
-echo "   - Empty output directory (output_images/)"

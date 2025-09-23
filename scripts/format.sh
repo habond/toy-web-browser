@@ -3,6 +3,13 @@
 
 set -e
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Change to project root directory
+cd "$PROJECT_ROOT"
+
 # Check if we're in CI or if dependencies are available
 if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ]; then
     echo "🤖 Running in CI environment, using system Python"

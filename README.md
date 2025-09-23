@@ -33,7 +33,7 @@ A simplified web browser that renders basic HTML to PNG images. This educational
 - **Text**: `<p>`, `<br>`, `<hr>`, `<pre>` (preformatted text with monospace font)
 - **Formatting**: `<b>`, `<i>`, `<u>`, `<strong>`, `<em>`, `<code>`
 - **Interactive**: `<button>` (rendered with background and border)
-- **Forms**: `<input>` (text, email, password, URL, search, submit, button, reset, checkbox, radio)
+- **Forms**: `<input>` (text, email, password, URL, search, submit, button, reset, checkbox, radio), `<select>`, `<option>`
 - **Lists**: `<ul>`, `<ol>`, `<li>`
 - **Tables**: `<table>`, `<tr>`, `<td>`, `<th>` (with grid borders and header styling)
 - **Other**: `<blockquote>`, `<a>`, `<span>`
@@ -157,10 +157,14 @@ The browser follows a clean 3-stage rendering pipeline with enhanced modularity:
    - **BaseElement**: Abstract base class defining layout() and render() interfaces
    - **ElementFactory**: Factory pattern for creating appropriate element instances
    - **Specialized Elements**: Each HTML tag type has its own focused class
-   - **Input Module** (`elements/input/`): Form elements with strategy pattern
+   - **Input Module** (`elements/input/`): Form input elements with strategy pattern
      - InputElement: Main coordinator using strategy pattern
      - Specialized renderers: TextInputRenderer, ButtonInputRenderer, CheckboxInputRenderer
      - Graceful fallback for unknown input types
+   - **Select Elements** (`elements/select.py`): Dropdown form controls
+     - SelectElement: Renders as dropdown box with arrow indicator
+     - OptionElement: Individual options within select elements
+     - Support for selected states and value attributes
    - **Table Module** (`elements/table/`): Complex table rendering split into focused components
      - TableElement: Main table coordination
      - TableRowElement: Row layout and management
@@ -177,6 +181,7 @@ The `examples/` directory contains a systematic set of HTML files demonstrating 
 - `04_lists.html`: Comprehensive list examples (ordered, unordered, with various content types)
 - `05_tables.html`: Table functionality with headers, data cells, and formatted content
 - `06_complex_nesting.html`: Advanced nesting scenarios, edge cases, and stress testing
+- `07_forms_and_inputs.html`: Form elements including text inputs, buttons, checkboxes, radio buttons, and select dropdowns
 
 Run all examples at once:
 ```bash

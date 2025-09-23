@@ -168,7 +168,7 @@ The main entry point (`src/browser.py`) orchestrates these components and provid
 
 ## Supported HTML Features
 
-Basic structure, headings (h1-h6), paragraphs, lists (ul/ol/li), tables (table/tr/td/th), text formatting (b/i/u/strong/em/code), interactive elements (button), form inputs (input with text, email, password, URL, search, submit, button, reset, checkbox, radio), links, and line breaks. Tables feature equal-width columns, grid borders, and header cell styling. Form inputs include proper text overflow handling and visual styling. See README.md for complete list.
+Basic structure, headings (h1-h6), paragraphs, lists (ul/ol/li), tables (table/tr/td/th), text formatting (b/i/u/strong/em/code), interactive elements (button), form inputs (input with text, email, password, URL, search, submit, button, reset, checkbox, radio), form selects (select/option with dropdown styling), links, and line breaks. Tables feature equal-width columns, grid borders, and header cell styling. Form inputs include proper text overflow handling and visual styling. Select elements render as dropdown boxes with arrow indicators and support selected states. See README.md for complete list.
 
 ## Project Structure
 
@@ -195,6 +195,7 @@ src/
     ├── inline.py             # Inline elements (b, i, span, a, code, etc.)
     ├── button.py             # Button elements with background styling
     ├── pre.py                # Preformatted text elements
+    ├── select.py             # Select and option elements with dropdown styling
     ├── special.py            # Special elements (br, hr)
     ├── input/                # 🆕 Modular input implementation (Phase 2)
     │   ├── __init__.py              # Clean interface exports

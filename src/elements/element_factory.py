@@ -2,7 +2,7 @@
 Element factory for creating appropriate element instances
 """
 
-from typing import Optional
+from typing import Dict, Optional, Type
 
 from ..html_parser import DOMNode
 from .base import BaseElement
@@ -13,6 +13,7 @@ from .inline import InlineElement
 from .input import InputElement
 from .list import ListElement, ListItemElement
 from .pre import PreElement
+from .select import OptionElement, SelectElement
 from .special import BreakElement, HorizontalRuleElement
 from .table import TableCellElement, TableElement, TableRowElement
 from .text import TextElement
@@ -36,6 +37,10 @@ class ElementFactory:
     # Input tags
     INPUT_TAGS = {"input"}
 
+    # Select tags
+    SELECT_TAGS = {"select"}
+    OPTION_TAGS = {"option"}
+
     # List tags
     LIST_TAGS = {"ul", "ol"}
 
@@ -51,39 +56,42 @@ class ElementFactory:
     BREAK_TAGS = {"br"}
     HR_TAGS = {"hr"}
 
+    # Tag to element class mapping
+    TAG_TO_ELEMENT: Dict[str, Type[BaseElement]] = {
+        # Text element
+        "text": TextElement,
+        # Heading elements
+        **{tag: HeadingElement for tag in HEADING_TAGS},
+        # Block elements
+        **{tag: BlockElement for tag in BLOCK_TAGS},
+        # Preformatted elements
+        **{tag: PreElement for tag in PRE_TAGS},
+        # Button elements
+        **{tag: ButtonElement for tag in BUTTON_TAGS},
+        # Input elements
+        **{tag: InputElement for tag in INPUT_TAGS},
+        # Select elements
+        **{tag: SelectElement for tag in SELECT_TAGS},
+        **{tag: OptionElement for tag in OPTION_TAGS},
+        # List elements
+        **{tag: ListElement for tag in LIST_TAGS},
+        "li": ListItemElement,  # Special case for list items
+        # Inline elements
+        **{tag: InlineElement for tag in INLINE_TAGS},
+        # Table elements
+        **{tag: TableElement for tag in TABLE_TAGS},
+        **{tag: TableRowElement for tag in TABLE_ROW_TAGS},
+        **{tag: TableCellElement for tag in TABLE_CELL_TAGS},
+        # Special elements
+        **{tag: BreakElement for tag in BREAK_TAGS},
+        **{tag: HorizontalRuleElement for tag in HR_TAGS},
+    }
+
     @classmethod
     def create_element(cls, dom_node: DOMNode) -> Optional[BaseElement]:
         """Create appropriate element instance for the given DOM node"""
         tag = dom_node.tag
 
-        if tag == "text":
-            return TextElement(dom_node)
-        elif tag in cls.HEADING_TAGS:
-            return HeadingElement(dom_node)
-        elif tag in cls.BLOCK_TAGS:
-            return BlockElement(dom_node)
-        elif tag in cls.PRE_TAGS:
-            return PreElement(dom_node)
-        elif tag in cls.BUTTON_TAGS:
-            return ButtonElement(dom_node)
-        elif tag in cls.INPUT_TAGS:
-            return InputElement(dom_node)
-        elif tag in cls.LIST_TAGS:
-            return ListElement(dom_node)
-        elif tag == "li":
-            return ListItemElement(dom_node)
-        elif tag in cls.INLINE_TAGS:
-            return InlineElement(dom_node)
-        elif tag in cls.TABLE_TAGS:
-            return TableElement(dom_node)
-        elif tag in cls.TABLE_ROW_TAGS:
-            return TableRowElement(dom_node)
-        elif tag in cls.TABLE_CELL_TAGS:
-            return TableCellElement(dom_node)
-        elif tag in cls.BREAK_TAGS:
-            return BreakElement(dom_node)
-        elif tag in cls.HR_TAGS:
-            return HorizontalRuleElement(dom_node)
-        else:
-            # Default to block element for unknown tags
-            return BlockElement(dom_node)
+        # Look up element class in mapping, default to BlockElement for unknown tags
+        element_class = cls.TAG_TO_ELEMENT.get(tag, BlockElement)
+        return element_class(dom_node)
